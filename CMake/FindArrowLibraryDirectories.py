@@ -54,3 +54,11 @@ with open(sys.argv[1] + "\\arrow.cmake", "w") as file:
             file.write("                      IMPORTED_LOCATION \"" + convert([p]) + "/arrow_python.dll\"\n")
     #    file.write("                      INTERFACE_LINK_LIBRARIES \"${ARROW_LIBRARIES} ws2_32\"\n")
     file.write("                      )\n")
+    file.write("\n")
+    for p in lib_dirs:
+        for file_name in os.listdir(p):
+            if file_name.endswith(".dll"):
+                file.write("FILE( REMOVE ${CMAKE_BINARY_DIR}/" + file_name + ")\n")
+                file.write("FILE( COPY " + convert([p]) + "/" + file_name + " DESTINATION ${CMAKE_BINARY_DIR}/)\n")
+
+

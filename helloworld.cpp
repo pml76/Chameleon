@@ -7,7 +7,7 @@
 
 void pyarrow_test() {
     std::cout << "pyarrow_test" << std::endl;
-    // arrow::py::import_pyarrow();
+    arrow::py::import_pyarrow();
 }
 
 

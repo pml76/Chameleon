@@ -21,7 +21,7 @@ if(${Python_Interpreter_FOUND})
 
 endif()
 
-target_link_libraries(HelloWorld PRIVATE Python::Python arrow::arrow_shared ) # arrow::pyarrow_shared)
+target_link_libraries(HelloWorld PRIVATE Python::Python arrow::arrow_shared arrow::pyarrow_shared)
 
 
 

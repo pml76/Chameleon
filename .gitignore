@@ -1,6 +1,8 @@
 # build directories
 build/
 build-*/
+.venv/
+.idea/
 
 # C++ objects and libs
 *.slo
