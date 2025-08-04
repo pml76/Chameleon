@@ -5,13 +5,14 @@ project(HelloWorld)
 
 add_executable(HelloWorld helloworld.cpp)
 
+find_package(Python3 COMPONENTS Development REQUIRED)
+target_link_libraries(HelloWorld PRIVATE Python3::Python)
 
-# add_subdirectory(./3rd-party/apache-arrow-21.0.0/cpp)
-#find_package(Arrow CONFIG REQUIRED)
-#target_link_libraries(HelloWorld PRIVATE Arrow::arrow_shared)
+include(CMake/GetInstalledPythonExecutable.cmake)
 
+get_installed_python_executable(Python_EXECUTABLE)
 
-find_package(Python COMPONENTS Interpreter Development)
+message(INFO "${Python_EXECUTABLE}")
 
 if(${Python_Interpreter_FOUND})
 
@@ -21,7 +22,7 @@ if(${Python_Interpreter_FOUND})
 
 endif()
 
-target_link_libraries(HelloWorld PRIVATE Python::Python arrow::arrow_shared arrow::pyarrow_shared)
+# target_link_libraries(HelloWorld PRIVATE arrow::arrow_shared arrow::arrow_compute_shared arrow::pyarrow_shared)
 
 
 

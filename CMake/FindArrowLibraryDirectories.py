@@ -35,8 +35,29 @@ with open(sys.argv[1] + "\\arrow.cmake", "w") as file:
     for p in lib_dirs:
         if os.path.exists( p + "\\arrow.dll" ):
             file.write("                      IMPORTED_LOCATION \"" + convert([p]) + "/arrow.dll\"\n")
+            break
 #    file.write("                      INTERFACE_LINK_LIBRARIES \"${ARROW_LIBRARIES} ws2_32\"\n")
     file.write("                      )\n")
+    file.write("\n")
+    # arrow_compute
+    file.write("add_library(arrow::arrow_compute_shared SHARED IMPORTED)\n")
+    file.write("set_target_properties(arrow::arrow_compute_shared PROPERTIES\n")
+    file.write("                      INTERFACE_COMPILE_FEATURES \"cxx_std_17\"\n")
+    file.write("                      IMPORTED_LINK_INTERFACE_LANGUAGES \"C;CXX\"")
+    file.write("                      INTERFACE_INCLUDE_DIRECTORIES \"${ARROW_INCLUDE_DIRS}\"\n")
+    file.write("                      INTERFACE_LINK_DIRECTORIES \"${ARROW_LIBRARY_DIRS}\"\n")
+    for p in lib_dirs:
+        if os.path.exists( p + "\\arrow_compute.lib" ):
+            file.write("                      IMPORTED_IMPLIB \"" + convert([p]) + "/arrow_compute.lib\"\n")
+            break
+
+    for p in lib_dirs:
+        if os.path.exists( p + "\\arrow_compute.dll" ):
+            file.write("                      IMPORTED_LOCATION \"" + convert([p]) + "/arrow_compute.dll\"\n")
+            break
+    #    file.write("                      INTERFACE_LINK_LIBRARIES \"${ARROW_LIBRARIES} ws2_32\"\n")
+    file.write("                      )\n")
+
     file.write("\n")
     file.write("add_library(arrow::pyarrow_shared SHARED IMPORTED)\n")
     file.write("set_target_properties(arrow::pyarrow_shared PROPERTIES\n")
@@ -52,6 +73,7 @@ with open(sys.argv[1] + "\\arrow.cmake", "w") as file:
     for p in lib_dirs:
         if os.path.exists( p + "\\arrow_python.dll" ):
             file.write("                      IMPORTED_LOCATION \"" + convert([p]) + "/arrow_python.dll\"\n")
+            break
     #    file.write("                      INTERFACE_LINK_LIBRARIES \"${ARROW_LIBRARIES} ws2_32\"\n")
     file.write("                      )\n")
     file.write("\n")
@@ -60,5 +82,6 @@ with open(sys.argv[1] + "\\arrow.cmake", "w") as file:
             if file_name.endswith(".dll"):
                 file.write("FILE( REMOVE ${CMAKE_BINARY_DIR}/" + file_name + ")\n")
                 file.write("FILE( COPY " + convert([p]) + "/" + file_name + " DESTINATION ${CMAKE_BINARY_DIR}/)\n")
+
 
 
