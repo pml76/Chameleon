@@ -14,5 +14,10 @@
   }, {
     "name" : "vcpkg-get-python",
     "version>=" : "2025-02-09"
-  } ]
+  }, {
+    "name" : "arrow",
+    "version>=" : "21.0.0",
+    "features": ["compute", "parquet", "flight", "flightsql", "acero", "dataset" ]
+  }
+  ]
 }

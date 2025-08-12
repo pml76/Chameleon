@@ -58,6 +58,10 @@ function(get_python)
         set(Pip_EXECUTABLE ${Python_BASE}/Scripts/pip${EXECUTABLE_EXTENSION})
         message(STATUS "Found pip in: ${Pip_EXECUTABLE}")
 
+        set(VCPKG_EXECUTABLE vcpkg.exe env)
+        message(STATUS "Executing pip using working directory: ${Python_BASE}")
+        message(STATUS "Pip-Executable: ${Pip_EXECUTABLE}")
+
         message(STATUS "Installing pandas 3.2.1")
         execute_process(COMMAND ${Pip_EXECUTABLE} install "pandas==2.3.1"
                         WORKING_DIRECTORY ${Python_BASE})
@@ -65,6 +69,18 @@ function(get_python)
         message(STATUS "Installing polars 1.32.2")
         execute_process(COMMAND ${Pip_EXECUTABLE} install "polars==1.32.2"
                         WORKING_DIRECTORY ${Python_BASE})
+
+        message(STATUS "CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}")
+
+        # set PYARROW_BUNDLE_ARROW_CPP=1
+        set( ENV{CMAKE_PREFIX_PATH} "${CMAKE_PREFIX_PATH}" )
+        set( ENV{PYARROW_BUNDLE_ARROW_CPP} 1 )
+        set( ENV{PYARROW_CMAKE_GENERATOR} Ninja)
+        message(STATUS "Installing arrow 21.0.0")
+        execute_process(COMMAND ${Pip_EXECUTABLE} install -v ${CMAKE_SOURCE_DIR}/extern/apache-arrow/python
+                WORKING_DIRECTORY ${Python_BASE})
+        unset( ENV{PYARROW_BUNDLE_ARROW_CPP} )
+
 
     endif ()
 

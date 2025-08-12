@@ -2,6 +2,9 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/extern/apache-arrow" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/extern/apache-arrow/cpp/submodules/parquet-testing" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/extern/apache-arrow/testing" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/extern/pybind11" vcs="Git" />
   </component>
 </project>
