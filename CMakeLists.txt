@@ -58,6 +58,23 @@ function(get_python)
         set(Pip_EXECUTABLE ${Python_BASE}/Scripts/pip${EXECUTABLE_EXTENSION})
         message(STATUS "Found pip in: ${Pip_EXECUTABLE}")
 
+        message(STATUS "Writing sitecustomize.py")
+        file(WRITE "${Python_BASE}/Lib/site-packages/sitecustomize.py"
+                "
+import os
+import sys
+from pathlib import Path
+
+import site
+#enable direct lookup of installed site-packages without the need to copy them
+site.addsitedir(sys.base_prefix + '/Lib/site-packages')
+
+vcpkg_bin_path = Path(sys.base_prefix + '/../../bin')
+if vcpkg_bin_path.is_dir():
+  os.add_dll_directory(vcpkg_bin_path)
+"
+        )
+
         set(VCPKG_EXECUTABLE vcpkg.exe env)
         message(STATUS "Executing pip using working directory: ${Python_BASE}")
         message(STATUS "Pip-Executable: ${Pip_EXECUTABLE}")
