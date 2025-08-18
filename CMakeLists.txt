@@ -31,7 +31,7 @@ function(get_python)
     set(Python_BASE ${CMAKE_BINARY_DIR}/Python-${VCPKG_TARGET_TRIPLET})
     message(STATUS "Creating venv in: ${Python_BASE}")
     execute_process(COMMAND ${Python_EXECUTABLE} -m venv ${Python_BASE} WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
-
+    set(Python_EXECUTABLE ${Python_BASE}/Scripts/python${EXECUTABLE_EXTENSION})
 
     if(NOT ${CMAKE_SYSTEM_NAME} STREQUAL "Windows" )
         message(FATAL_ERROR "Not running on windows. Don't know how to handle python here... aborting!")
@@ -39,9 +39,6 @@ function(get_python)
 
 
     if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
-        SET(Python_EXECUTABLE ${Python_WORKING_DIR}/Scripts/python${EXECUTABLE_EXTENSION})
-
-
         if (NOT EXISTS ${Python_BASE}/Scripts/pip${EXECUTABLE_EXTENSION})
             message(STATUS "Installing pip...")
             FetchContent_Declare(
@@ -83,20 +80,21 @@ if vcpkg_bin_path.is_dir():
         execute_process(COMMAND ${Pip_EXECUTABLE} install "pandas==2.3.1"
                         WORKING_DIRECTORY ${Python_BASE})
 
-        message(STATUS "Installing polars 1.32.2")
-        execute_process(COMMAND ${Pip_EXECUTABLE} install "polars==1.32.2"
-                        WORKING_DIRECTORY ${Python_BASE})
+#        message(STATUS "Installing polars 1.32.2")
+#        execute_process(COMMAND ${Pip_EXECUTABLE} install "polars==1.32.2"
+#                        WORKING_DIRECTORY ${Python_BASE})
 
         message(STATUS "CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}")
 
         # set PYARROW_BUNDLE_ARROW_CPP=1
         set( ENV{CMAKE_PREFIX_PATH} "${CMAKE_PREFIX_PATH}" )
-        set( ENV{PYARROW_BUNDLE_ARROW_CPP} 1 )
         set( ENV{PYARROW_CMAKE_GENERATOR} Ninja)
         message(STATUS "Installing arrow 21.0.0")
         execute_process(COMMAND ${Pip_EXECUTABLE} install -v ${CMAKE_SOURCE_DIR}/extern/apache-arrow/python
                 WORKING_DIRECTORY ${Python_BASE})
-        unset( ENV{PYARROW_BUNDLE_ARROW_CPP} )
+
+        # message(STATUS "Generating 'arrow.cmake'")
+        # execute_process( COMMAND ${Python_EXECUTABLE} FindArrowLibraryDirectories.py ${CMAKE_BINARY_DIR} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/CMake )
 
 
     endif ()
@@ -106,15 +104,10 @@ endfunction()
 get_python()
 
 
-if(${Python_Interpreter_FOUND})
-
-    execute_process( COMMAND ${Python_EXECUTABLE} FindArrowLibraryDirectories.py ${CMAKE_BINARY_DIR} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/CMake/ OUTPUT_VARIABLE Arrow_Library_Dirs)
-
-    include(${CMAKE_BINARY_DIR}/arrow.cmake)
-
-endif()
-
+# include(${CMAKE_BINARY_DIR}/arrow.cmake)
 # target_link_libraries(HelloWorld PRIVATE arrow::arrow_shared arrow::arrow_compute_shared arrow::pyarrow_shared)
 
+find_package(Arrow REQUIRED)
+target_link_libraries(HelloWorld PRIVATE Arrow::arrow_shared)
 
 

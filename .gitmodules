@@ -1,7 +1,3 @@
-[submodule "extern/pybind11"]
-	path = extern/pybind11
-	url = https://github.com/pybind/pybind11.git
-	branch = stable
-[submodule "extern/apache-arrow"]
-	path = extern/apache-arrow
-	url = https://github.com/pml76/arrow.git
+[submodule "extern/polars"]
+	path = extern/polars
+	url = https://github.com/pml76/polars.git

@@ -6,9 +6,6 @@ lib_dirs = pa.get_library_dirs()
 include_dirs = pa.get_include()
 libs = pa.get_libraries()
 
-
-
-
 def convert(lst):
     lst2 = []
     for i in lst:
