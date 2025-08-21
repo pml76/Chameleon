@@ -1,6 +1,7 @@
 # build directories
 build/
 build-*/
+build-output/
 .venv/
 .idea/
 

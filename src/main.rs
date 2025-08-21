@@ -34,6 +34,9 @@ buildings
 "#);
 
 fn pyo3_test_3() {
+    let mut df: DataFrame = DataFrame::empty();
+
+
     let result : Result<(), PyErr> = Python::with_gil(|py| {
         let sys = py.import("sys")?;
         let path = sys.getattr("path")?;
@@ -49,12 +52,14 @@ fn pyo3_test_3() {
 
                let res = PyDataFrame::extract_bound(&module.getattr(i.extract::<String>()?)?)?;
                let res2 : DataFrame = res.into();
+                df = res2.clone();
                println!("{:?}", res2);
                // println!("{} : {}.{}", i.extract::<String>()?, m, t.name()?);
             }
         }
         Ok(())
     });
+    println!("{:?}", df);
     if result.is_ok() {
         println!("pyo3_test_3: OK");
     } else {
