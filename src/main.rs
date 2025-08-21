@@ -59,6 +59,10 @@ fn pyo3_test_3() {
         }
         Ok(())
     });
+    let schema = df.schema();
+    for field in schema.iter_fields() {
+        println!("{} : {:?}", field.name, field.dtype());
+    }
     println!("{:?}", df);
     if result.is_ok() {
         println!("pyo3_test_3: OK");
