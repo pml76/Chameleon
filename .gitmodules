@@ -1,3 +1,0 @@
-[submodule "extern/polars"]
-	path = extern/polars
-	url = https://github.com/pml76/polars.git

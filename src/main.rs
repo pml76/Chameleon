@@ -40,7 +40,7 @@ fn pyo3_test_3() {
     let result : Result<(), PyErr> = Python::with_gil(|py| {
         let sys = py.import("sys")?;
         let path = sys.getattr("path")?;
-        path.call_method1("append", ("c:\\Users\\U439644\\Projects\\Chameleon\\.venv\\Lib\\site-packages",))?;
+        path.call_method1("append", ("c:\\GitHub\\Chameleon\\.venv\\Lib\\site-packages",))?;
 
         let module = PyModule::from_code(py, CODE2, c_str!(""), c_str!(""))?;
         let dir = module.dir()?;
@@ -77,7 +77,7 @@ fn pyo3_test_2() {
     let result : Result<(), PyErr> = Python::with_gil(|py| {
         let sys = py.import("sys")?;
         let path = sys.getattr("path")?;
-        path.call_method1("append", ("c:\\Users\\U439644\\Projects\\Chameleon\\.venv\\Lib\\site-packages",))?;
+        path.call_method1("append", ("c:\\GitHub\\Chameleon\\.venv\\Lib\\site-packages",))?;
 
         let module = PyModule::from_code(py, CODE, c_str!(""), c_str!(""))?;
         let fun = module.getattr("function")?;
