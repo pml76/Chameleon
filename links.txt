@@ -3,3 +3,6 @@ Polars 1.32.3 has a bug that makes a downgrade to 1.31 necessary in python.
 The issue is described here.
 
 https://github.com/pola-rs/polars/issues/24109
+
+so long supported version is:
+pip install polars[all]==1.31
