@@ -2,7 +2,7 @@ use cxx_qt_build::{CxxQtBuilder, QmlModule};
 use std::fs;
 use std::io;
 use std::path::Path;
-use std::io::Write;
+
 
 
 
@@ -57,7 +57,7 @@ fn main() {
         .qt_module("Network")
         .qml_module(QmlModule {
             uri: "com.kdab.cxx_qt.demo",
-            rust_files: &["src/cxxqt_object.rs"],
+            rust_files: &["src/cxxqt_object.rs", "src/table_model.rs"],
             qml_files: &["qml/main.qml"],
             ..Default::default()
         })

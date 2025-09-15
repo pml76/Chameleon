@@ -18,6 +18,8 @@ qt_add_qml_module(apptest
     QML_FILES
         Main.qml
 )
+set(QT_QML_GENERATE_QMLLS_INI ON)
+set(QML_IMPORT_PATH ${QML_IMPORT_PATH} ${CMAKE_SOURCE_DIR}/../target/debug/qml_modules/)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an

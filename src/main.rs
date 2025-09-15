@@ -1,4 +1,6 @@
 pub mod cxxqt_object;
+pub mod table_model;
+pub mod python_interface;
 
 use pyo3_polars::*;
 use pyo3::prelude::*;
