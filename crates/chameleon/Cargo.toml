@@ -1,0 +1,23 @@
+[package]
+name = "chameleon"
+version = "0.1.0"
+edition = "2024"
+
+authors = [
+    "Peter Lennartz <peter.lennartz@gmail.com>"
+]
+license = "MIT OR Apache-2.0"
+
+[dependencies]
+cxx = { workspace = true }
+cxx-qt = { workspace = true }
+cxx-qt-lib = { workspace = true }
+pyo3 = { workspace = true }
+polars = { workspace = true }
+pyo3-polars = {workspace = true }
+chrono = { workspace = true }
+
+[build-dependencies]
+# The link_qt_object_files feature is required for statically linking Qt 6.
+cxx-qt-build = { workspace = true }
+
