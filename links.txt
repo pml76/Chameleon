@@ -6,3 +6,7 @@ https://github.com/pola-rs/polars/issues/24109
 
 so long supported version is:
 pip install polars[all]==1.31
+
+
+run QtCreator from shell after setting the environment variable:
+$env:QML_IMPORT_PATH="C:\path\to\project\target\debug\qml_modules"

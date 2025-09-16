@@ -19,6 +19,24 @@ ApplicationWindow {
         string: qsTr("My String with my number: %1").arg(myObject.number)
     }
 
+    TableView {
+        anchors.fill: parent
+        columnSpacing: 1
+        rowSpacing: 1
+        clip: true
+
+        model: TableModel {}
+
+        delegate: Rectangle {
+            implicitWidth: 100
+            implicitHeight: 50
+            Text {
+                text: display
+            }
+        }
+    }
+
+    /*
     Column {
         anchors.fill: parent
         anchors.margins: 10
@@ -51,5 +69,7 @@ ApplicationWindow {
 
             onClicked: Qt.quit()
         }
+
     }
+    */
 }

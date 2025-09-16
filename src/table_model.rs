@@ -36,6 +36,7 @@ mod qobject {
         fn rowCount(self: &TableModel, parent: &QModelIndex) -> i32;
 
         #[cxx_override]
+        #[rust_name = "data"]
         fn data(self: &TableModel, index: &QModelIndex, role: i32) -> QVariant;
 
         #[cxx_override]
@@ -43,6 +44,8 @@ mod qobject {
         fn roleNames(self: &TableModel) -> QHash_i32_QByteArray;
     }
 }
+
+
 
 pub struct TableModelRust {
     column_header: Vec<QString>,
@@ -53,9 +56,10 @@ pub struct TableModelRust {
 impl Default for TableModelRust {
     fn default() -> Self {
         Self {
-            column_header: vec![],
-            row_header: vec![],
-            contents: vec![],
+            column_header: vec!["col1".into(), "col2".into()],
+            row_header: vec!["row1".into(), "row2".into()],
+            contents: vec![vec![QVariant::from(&QString::from("field1")), QVariant::from(&QString::from("field2")), ],
+                           vec![QVariant::from(&QString::from("field3")), QVariant::from(&QString::from("field4")), ]],
         }
     }
 }
@@ -79,7 +83,7 @@ impl qobject::TableModel {
 
     fn role_names(self: &TableModel) -> QHash_i32_QByteArray {
         let mut hash = QHash_i32_QByteArray::default();
-        hash.insert(0, "text".into());
+        hash.insert(0, "display".into());
         hash
     }
 }
