@@ -301,6 +301,7 @@ dependencies = [
  "cxx-qt",
  "cxx-qt-build",
  "cxx-qt-lib",
+ "cxx-qt-lib-additions",
  "polars",
  "pyo3",
  "pyo3-polars",

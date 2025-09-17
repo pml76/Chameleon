@@ -1,6 +1,7 @@
 use cxx_qt::CxxQtType;
 use cxx_qt_lib::{QVariant, QModelIndex, QString};
 
+
 #[cxx_qt::bridge]
 mod qobject {
 
@@ -19,6 +20,9 @@ mod qobject {
 
         include!("cxx-qt-lib/qhash.h");
         type QHash_i32_QByteArray = cxx_qt_lib::QHash<cxx_qt_lib::QHashPair_i32_QByteArray>;
+
+        #[namespace = "Qt"]
+        type Orientation = cxx_qt_lib_additions::Orientation;
     }
 
     unsafe extern "RustQt" {
@@ -42,6 +46,10 @@ mod qobject {
         #[cxx_override]
         #[rust_name = "role_names"]
         fn roleNames(self: &TableModel) -> QHash_i32_QByteArray;
+
+        #[cxx_override]
+        #[rust_name = "header_data"]
+        fn headerData(self: &TableModel, section: i32, orientation: Orientation, role: i32) -> QVariant;
     }
 }
 
@@ -85,5 +93,23 @@ impl qobject::TableModel {
         let mut hash = QHash_i32_QByteArray::default();
         hash.insert(0, "display".into());
         hash
+    }
+
+    fn header_data(self: &TableModel, section: i32, orientation: Orientation, _role: i32) -> QVariant {
+
+        if orientation != Orientation::Horizontal {
+            let col = section as usize;
+            if col < self.rust().column_header.len() {
+                return self.rust().column_header.get(col).unwrap().into();
+            }
+        }
+        if orientation != Orientation::Vertical {
+            let row = section as usize;
+            if row < self.rust().row_header.len() {
+                return self.rust().row_header.get(row).unwrap().into();
+            }
+        }
+
+        QVariant::default()
     }
 }

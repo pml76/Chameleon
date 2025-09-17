@@ -1,9 +1,10 @@
 ﻿#[cxx_qt::bridge]
 mod qobject {
     #[namespace = "Qt"]
+    #[repr(i32)]
     enum Orientation {
-        Horizontal,
-        Vertical,
+        Horizontal = 1,
+        Vertical = 2,
     }
 
     #[namespace = "Qt"]
@@ -14,4 +15,4 @@ mod qobject {
     
 }
 
-use qobject::*;
+pub use qobject::*;

@@ -10,6 +10,7 @@ pyo3 = { version = "0.25.1", features = ["extension-module", "auto-initialize", 
 polars = "0.50.0" # { git = "https://github.com/pml76/polars.git", tag = "py-1.32.2" }
 pyo3-polars = "0.23.1"
 chrono = "0.4.42"
+cxx-qt-lib-additions = { path = "crates/cxx-qt-lib-additions"}
 
 # The link_qt_object_files feature is required for statically linking Qt 6.
 cxx-qt-build = { version = "0.7.2", features = [ "link_qt_object_files" ] }
