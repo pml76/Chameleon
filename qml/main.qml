@@ -1,6 +1,6 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import QtQuick.Window 2.12
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Window
 
 // This must match the uri and version
 // specified in the qml_module in the build.rs script.
@@ -19,19 +19,50 @@ ApplicationWindow {
         string: qsTr("My String with my number: %1").arg(myObject.number)
     }
 
-    TableView {
+    TableModel {
+        id: tableModel
+    }
+
+
+    Rectangle {
+
         anchors.fill: parent
-        columnSpacing: 1
-        rowSpacing: 1
-        clip: true
 
-        model: TableModel {}
+        HorizontalHeaderView {
+            id: horizontalHeader
+            anchors.left: tableView.left
+            anchors.top: parent.top
+            syncView: tableView
+            clip: true
+        }
 
-        delegate: Rectangle {
-            implicitWidth: 100
-            implicitHeight: 50
-            Text {
-                text: display
+        VerticalHeaderView {
+            id: verticalHeader
+            anchors.top: tableView.top
+            anchors.left: parent.left
+            syncView: tableView
+            clip: true
+        }
+
+        TableView {
+            id: tableView
+            anchors.left: verticalHeader.right
+            anchors.top: horizontalHeader.bottom
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+
+            columnSpacing: 1
+            rowSpacing: 1
+            clip: true
+
+            model: tableModel
+
+            delegate: Rectangle {
+                implicitWidth: 100
+                implicitHeight: 50
+                Text {
+                    text: display
+                }
             }
         }
     }
