@@ -1,10 +1,11 @@
-﻿use chrono_tz::Tz;
+﻿use std::sync::Arc;
+use chrono_tz::Tz;
 use crate::python_dataframe_model::qobject::DataFrameModel;
 use crate::time_and_dates::tz_to_qtimezone;
 use cxx_qt::CxxQtType;
 use cxx_qt_lib::{QDate, QDateTime, QModelIndex, QString, QTime, QTimeZone, QVariant};
 use polars::datatypes::{AnyValue::*};
-use polars::prelude::{DataFrame, TimeUnit};
+use polars::prelude::{AnyValue, CatSize, CategoricalMapping, DataFrame, TimeUnit, TimeZone};
 
 #[cxx_qt::bridge]
 mod qobject {
@@ -65,6 +66,97 @@ impl Default for DataFrameModelRust {
 }
 
 
+fn categorical_entry_to_qvariant(idx: &CatSize, categories: &Arc<CategoricalMapping>) -> QVariant {
+    let mut c = QString::from("");
+    let oc = (*categories).cat_to_str(*idx);
+    if let Some(c2) = oc {
+        c = QString::from(c2);
+    }
+    return QVariant::from(&c)
+}
+
+fn datetime_to_qvariant(d : &i64, time_unit : &TimeUnit, time_zone : &Option<&TimeZone>) -> QVariant {
+    let unit_divisor = match time_unit {
+        TimeUnit::Nanoseconds =>  1000000,
+        TimeUnit::Microseconds => 1000,
+        TimeUnit::Milliseconds => 1
+    };
+    let time_zone = if let Some(tz) = time_zone {
+        if let Ok(tz) = (*tz).to_chrono() {
+            tz
+        } else {
+            Tz::UTC
+        }
+    } else {
+        Tz::UTC
+    };
+    let mut qtimezone = QTimeZone::utc();
+    let tz = tz_to_qtimezone(time_zone);
+    if let Some(_) = tz.as_ref() {
+        qtimezone = tz;
+    }
+    return QVariant::from(&QDateTime::from_msecs_since_epoch(d/unit_divisor, qtimezone.as_ref().unwrap()));
+}
+
+fn any_value_to_qvariant(value: &AnyValue) -> QVariant {
+    match value {
+        Boolean(b) => 
+            QVariant::from(b),
+        String(str) => 
+            QVariant::from(&QString::from(*str)),
+        UInt8(u) => 
+            QVariant::from(u),
+        UInt16(u) => 
+            QVariant::from(u),
+        UInt32(u) => 
+            QVariant::from(u),
+        UInt64(u) => 
+            QVariant::from(u),
+        Int8(i) => 
+            QVariant::from(i),
+        Int16(i) => 
+            QVariant::from(i),
+        Int32(i) => 
+            QVariant::from(i),
+        Int64(i) => 
+            QVariant::from(i),
+        Float32(f) => 
+            QVariant::from(f),
+        Float64(f) => 
+            QVariant::from(f),
+        Date(d) => 
+            QVariant::from(&QDate::new(1970, 1, 1).add_days(*d as i64)),
+        Datetime(d, time_unit, time_zone) =>
+            datetime_to_qvariant(d, time_unit, time_zone),
+        DatetimeOwned(d, time_unit, time_zone) => {
+            if let Some(tz) = time_zone {
+                datetime_to_qvariant(d, time_unit, &Some(&**tz))
+            } else {
+                datetime_to_qvariant(d, time_unit, &None)
+            }
+        },
+        Duration(t,time_unit) => {
+            let unit_divisor = match time_unit {
+                TimeUnit::Nanoseconds =>  1000000,
+                TimeUnit::Microseconds => 1000,
+                TimeUnit::Milliseconds => 1
+            };
+            QVariant::from(&(t / unit_divisor))
+        },
+        Time(t) => 
+            QVariant::from(&QTime::from_msecs_since_start_of_day((t / 1000000) as i32) ),
+        Categorical(idx, categories) => 
+            categorical_entry_to_qvariant(idx, categories),
+        CategoricalOwned(idx, categories) => 
+            categorical_entry_to_qvariant(idx, categories),
+        Enum(idx, categories) => 
+            categorical_entry_to_qvariant(idx, categories),
+        EnumOwned(idx, categories) => 
+            categorical_entry_to_qvariant(idx, categories),
+        _ => QVariant::default()
+    }
+}
+
 impl qobject::DataFrameModel {
     fn column_count(self: &DataFrameModel, _parent: &QModelIndex) -> i32 {
         self.rust().df.shape().1 as i32
@@ -73,6 +165,7 @@ impl qobject::DataFrameModel {
     fn row_count(self: &DataFrameModel, _parent: &QModelIndex) -> i32 {
         self.rust().df.shape().0 as i32
     }
+
 
     fn data (self: &DataFrameModel, index: &QModelIndex, _role: i32) -> QVariant {
         let row = index.row() as usize;
@@ -84,108 +177,7 @@ impl qobject::DataFrameModel {
             if let Some((_name, _dtype)) = schema.get_at_index(col) {
                 let column = self.rust().df.select_at_idx(col).unwrap();
                 let value = &column.get(row).unwrap();
-                match value {
-                    Boolean(b) => return QVariant::from(b),
-                    String(str) => return QVariant::from(&QString::from(*str)),
-                    UInt8(u) => return QVariant::from(u),
-                    UInt16(u) => return QVariant::from(u),
-                    UInt32(u) => return QVariant::from(u),
-                    UInt64(u) => return QVariant::from(u),
-                    Int8(i) => return QVariant::from(i),
-                    Int16(i) => return QVariant::from(i),
-                    Int32(i) => return QVariant::from(i),
-                    Int64(i) => return QVariant::from(i),
-                    Float32(f) => return QVariant::from(f),
-                    Float64(f) => return QVariant::from(f),
-                    Date(d) => return QVariant::from(&QDate::new(1970,1,1).add_days(*d as i64)),
-                    Datetime(d, time_unit, time_zone) => {
-                        let unit_divisor = match time_unit {
-                            TimeUnit::Nanoseconds =>  1000000,
-                            TimeUnit::Microseconds => 1000,
-                            TimeUnit::Milliseconds => 1
-                        };
-                        let time_zone = if let Some(tz) = time_zone {
-                            if let Ok(tz) = tz.to_chrono() {
-                                tz
-                            } else {
-                                Tz::UTC
-                            }
-                        } else {
-                            Tz::UTC
-                        };
-                        let mut qtimezone = QTimeZone::utc();
-                        let tz = tz_to_qtimezone(time_zone);
-                        if let Some(_) = tz.as_ref() {
-                            qtimezone = tz;
-                        }
-
-                        return QVariant::from(&QDateTime::from_msecs_since_epoch(d/unit_divisor, qtimezone.as_ref().unwrap()));
-                    }
-                    DatetimeOwned(d, time_unit, time_zone) => {
-                        let unit_divisor = match time_unit {
-                            TimeUnit::Nanoseconds =>  1000000,
-                            TimeUnit::Microseconds => 1000,
-                            TimeUnit::Milliseconds => 1
-                        };
-                        let time_zone = if let Some(tz) = time_zone {
-                            if let Ok(tz) = (*tz).to_chrono() {
-                                tz
-                            } else {
-                                Tz::UTC
-                            }
-                        } else {
-                            Tz::UTC
-                        };
-                        let mut qtimezone = QTimeZone::utc();
-                        let tz = tz_to_qtimezone(time_zone);
-                        if let Some(_) = tz.as_ref() {
-                            qtimezone = tz;
-                        }
-                        return QVariant::from(&QDateTime::from_msecs_since_epoch(d/unit_divisor, qtimezone.as_ref().unwrap()));
-                    }
-                    Duration(t,time_unit) => {
-                        let unit_divisor = match time_unit {
-                            TimeUnit::Nanoseconds =>  1000000,
-                            TimeUnit::Microseconds => 1000,
-                            TimeUnit::Milliseconds => 1
-                        };
-                        return QVariant::from(&(t / unit_divisor));
-                    },
-                    Time(t) => return QVariant::from(&QTime::from_msecs_since_start_of_day((t / 1000000) as i32) ),
-                    Categorical(idx, categories) => {
-                        let mut c = QString::from("");
-                        let oc = (*categories).cat_to_str(*idx);
-                        if let Some(c2) = oc {
-                            c = QString::from(c2);
-                        }
-                        return QVariant::from(&c)
-                    }
-                    CategoricalOwned(idx, categories) => {
-                        let mut c = QString::from("");
-                        let oc = (*categories).cat_to_str(*idx);
-                        if let Some(c2) = oc {
-                            c = QString::from(c2);
-                        }
-                        return QVariant::from(&c)
-                    }
-                    Enum(idx, categories) => {
-                        let mut c = QString::from("");
-                        let oc = (*categories).cat_to_str(*idx);
-                        if let Some(c2) = oc {
-                            c = QString::from(c2);
-                        }
-                        return QVariant::from(&c)
-                    }
-                    EnumOwned(idx, categories) => {
-                        let mut c = QString::from("");
-                        let oc = (*categories).cat_to_str(*idx);
-                        if let Some(c2) = oc {
-                            c = QString::from(c2);
-                        }
-                        return QVariant::from(&c)
-                    }
-                    _ => {}
-                }
+                return any_value_to_qvariant(value);
             }
         }
 
