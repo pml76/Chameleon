@@ -57,7 +57,7 @@ fn main() {
         .qt_module("Network")
         .qml_module(QmlModule {
             uri: "com.kdab.cxx_qt.demo",
-            rust_files: &["src/cxxqt_object.rs", "src/table_model.rs"],
+            rust_files: &["src/cxxqt_object.rs", "src/table_model.rs", "src/python_dataframe_model.rs"],
             qml_files: &["../../qml/main.qml"],
             ..Default::default()
         })

@@ -16,7 +16,9 @@ pyo3 = { workspace = true }
 polars = { workspace = true }
 pyo3-polars = {workspace = true }
 chrono = { workspace = true }
+chrono-tz = { workspace = true }
 cxx-qt-lib-additions = { workspace = true }
+
 
 [build-dependencies]
 # The link_qt_object_files feature is required for statically linking Qt 6.

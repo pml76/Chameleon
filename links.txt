@@ -5,7 +5,9 @@ The issue is described here.
 https://github.com/pola-rs/polars/issues/24109
 
 so long supported version is:
-pip install polars[all]==1.31
+pip install polars[all]==1.31 (obsolete)
+
+pip install polars[all]==1.33.1 (works, too)
 
 
 run QtCreator from shell after setting the environment variable:
