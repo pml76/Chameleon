@@ -19,7 +19,7 @@ ApplicationWindow {
         string: qsTr("My String with my number: %1").arg(myObject.number)
     }
 
-    TableModel {
+    DataFrameModel {
         id: tableModel
     }
 
