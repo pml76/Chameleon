@@ -1,0 +1,1 @@
+﻿pub const SETTINGS_FILE_NAME: &str = "chameleon_settings.json";

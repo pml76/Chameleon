@@ -10,3 +10,4 @@ cxx-qt = { workspace = true }
 [build-dependencies]
 cxx-qt-build = { workspace = true }
 
+

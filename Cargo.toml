@@ -3,7 +3,7 @@ members = ["xtask/", "crates/*"]
 resolver = "3"
 
 [workspace.dependencies]
-cxx = "1.0.184"
+cxx = "1.0.185"
 cxx-qt = "0.7.2"
 cxx-qt-lib = { version="0.7.2", features = ["qt_full"] }
 pyo3 = { version = "0.25.1", features = ["extension-module", "auto-initialize", "abi3", "macros"] }
@@ -15,4 +15,14 @@ cxx-qt-lib-additions = { path = "crates/cxx-qt-lib-additions"}
 
 # The link_qt_object_files feature is required for statically linking Qt 6.
 cxx-qt-build = { version = "0.7.2", features = [ "link_qt_object_files" ] }
+cxx-build = { version = "1.0.185" }
+chumsky = {version = "0.11.1"}
+icu = { version = "2.0.0", features = ["compiled_data", "datagen", "experimental", "serde"] }
+serde_json = { version = "1.0.145", features = ["indexmap"] }
+serde = {version = "1.0.226", features = ["derive"]}
+vcpkg = { version = "0.2.15" }
+chameleon_settings = { path = "crates/chameleon_settings" }
+
+
+
 

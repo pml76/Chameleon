@@ -61,6 +61,7 @@ ApplicationWindow {
                 implicitWidth: 100
                 implicitHeight: 50
                 Text {
+                    anchors.centerIn: parent
                     text: display
                 }
             }

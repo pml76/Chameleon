@@ -3,6 +3,9 @@ pub mod table_model;
 pub mod python_interface;
 pub mod python_dataframe_model;
 mod time_and_dates;
+mod format;
+mod dialogs;
+
 
 use pyo3_polars::*;
 use pyo3::prelude::*;
