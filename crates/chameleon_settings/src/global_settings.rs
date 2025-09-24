@@ -6,6 +6,7 @@ use crate::find_settings_file::find_settings_file;
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct GlobalSettings {
     pub locales_directory: PathBuf,
+    pub python_base_directory: PathBuf,
     pub default_locale: String,
 }
 
@@ -31,7 +32,7 @@ pub fn get_global_settings() -> Option<GlobalSettings> {
             return Some(s);
         }
     }
-    panic!("Failed to load global settings");
+    panic!("Failed to load global settings. Search path: {:?}", find_settings_file());
 }
 static GLOBAL_SETTINGS: Mutex<Option<GlobalSettings>> = Mutex::new(None);
 
@@ -47,5 +48,18 @@ pub fn get_global_settings_locales_directory() -> PathBuf {
         return gs.locales_directory.clone();
     }
     panic!("Failed to load global settings to find locales directory");
+
+}
+pub fn get_global_settings_python_base_directory() -> PathBuf {
+    let mut gs = GLOBAL_SETTINGS.lock().unwrap();
+
+    if gs.as_ref().is_none() {
+        *gs = get_global_settings();
+    }
+
+    if let Some(gs) = gs.as_ref() {
+        return gs.python_base_directory.clone();
+    }
+    panic!("Failed to load global settings to find python base directory");
 
 }

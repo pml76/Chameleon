@@ -16,6 +16,7 @@ use std::ffi::CStr;
 
 
 use cxx_qt_lib::{QGuiApplication, QQmlApplicationEngine, QUrl};
+use chameleon_settings::get_global_settings_python_base_directory;
 
 const CODE: &CStr = c_str!(r#"
 import polars as pl
@@ -48,7 +49,11 @@ fn pyo3_test_3() {
     let result : Result<(), PyErr> = Python::with_gil(|py| {
         let sys = py.import("sys")?;
         let path = sys.getattr("path")?;
-        path.call_method1("append", ("c:\\GitHub\\Chameleon\\.venv\\Lib\\site-packages",))?;
+        let mut python_base_directory = get_global_settings_python_base_directory();
+        python_base_directory.push("Lib");
+        python_base_directory.push("site-packages");
+
+        path.call_method1("append", (python_base_directory.to_str().unwrap(),))?;
 
         let module = PyModule::from_code(py, CODE2, c_str!(""), c_str!(""))?;
         let dir = module.dir()?;
@@ -85,7 +90,11 @@ fn pyo3_test_2() {
     let result : Result<(), PyErr> = Python::with_gil(|py| {
         let sys = py.import("sys")?;
         let path = sys.getattr("path")?;
-        path.call_method1("append", ("c:\\GitHub\\Chameleon\\.venv\\Lib\\site-packages",))?;
+        let mut python_base_directory = get_global_settings_python_base_directory();
+        python_base_directory.push("Lib");
+        python_base_directory.push("site-packages");
+
+        path.call_method1("append", (python_base_directory.to_str().unwrap(),))?;
 
         let module = PyModule::from_code(py, CODE, c_str!(""), c_str!(""))?;
         let fun = module.getattr("function")?;

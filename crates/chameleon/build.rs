@@ -96,6 +96,14 @@ fn main() {
         .build();
 
     let out_dir = std::env::var("OUT_DIR").unwrap();
+    let mut cargo_manifest_dir = PathBuf::from(std::env::var("CARGO_MANIFEST_DIR").unwrap().as_str());
+    cargo_manifest_dir.pop();
+    cargo_manifest_dir.pop();
+    let python_dir = cargo_manifest_dir.join(".venv");
+
+    if !python_dir.exists() {
+        panic!("Python virtual environment not found. Please create it first by running `python -m venv .venv` in the project root directory.");
+    }
 
     copy_dir_recursive(
         format!("{}/qt-build-utils/qml_modules", out_dir),
@@ -115,6 +123,7 @@ fn main() {
     let settings = GlobalSettings {
         locales_directory: PathBuf::from(loc_dir.to_str().unwrap()),
         default_locale: "en".to_string(),
+        python_base_directory: PathBuf::from(python_dir.clone()),
     };
 
     let mut path = PathBuf::from(out_dir);
