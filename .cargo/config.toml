@@ -5,3 +5,4 @@
 [env]
 # PYO3_PYTHON = "c:\\GitHub\\Chameleon\\.venv\\Scripts\\python.exe"
 PYO3_PYTHON = "c:\\Users\\U439644\\Projects\\Chameleon\\.venv\\Scripts\\python.exe"
+CONAN="c:\\Users\\U439644\\Projects\\Chameleon\\.venv\\Scripts\\conan.exe"

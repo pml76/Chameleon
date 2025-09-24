@@ -3,6 +3,7 @@ use std::fs;
 use std::io;
 use std::path::{Path, PathBuf};
 use chameleon_settings::*;
+use conan2::ConanInstall;
 
 pub fn copy_dir_recursive<S: AsRef<Path>, D: AsRef<Path>>(src: S, dst: D) -> io::Result<()> {
     fn copy_dir(src: &Path, dst: &Path) -> io::Result<()> {
@@ -44,6 +45,13 @@ pub fn copy_dir_recursive<S: AsRef<Path>, D: AsRef<Path>>(src: S, dst: D) -> io:
 }
 
 fn main() {
+
+    ConanInstall::new()
+        .build("missing")
+        .run()
+        .parse()
+        .emit();
+
     let fmt = vcpkg::Config::new().emit_includes(true).find_package("fmt");
     let mut paths : Vec<String> = Vec::new();
     

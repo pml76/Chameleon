@@ -367,6 +367,7 @@ dependencies = [
  "chrono",
  "chrono-tz",
  "chumsky",
+ "conan2",
  "cxx",
  "cxx-build",
  "cxx-qt",
@@ -553,6 +554,15 @@ dependencies = [
  "ryu",
  "serde",
  "static_assertions",
+]
+
+[[package]]
+name = "conan2"
+version = "0.1.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "139554ce435c45ad06f6883861a24070fb2ed68470a7f9b3f0edc18fd7f5efa4"
+dependencies = [
+ "serde_json",
 ]
 
 [[package]]
