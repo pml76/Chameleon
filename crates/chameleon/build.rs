@@ -130,6 +130,8 @@ fn main() {
     path.pop();
     path.pop();
     path.pop();
+    path.pop();
+    path.pop();
     path = path.join(SETTINGS_FILE_NAME);
     let file = std::fs::File::create(path).unwrap();
     serde_json::to_writer(

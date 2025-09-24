@@ -3,7 +3,8 @@
 // - the current directory ./chameleon_settings.json
 
 use std::env;
-use std::path::{Path, PathBuf};
+use std::fs::canonicalize;
+use std::path::{PathBuf};
 use crate::settings_file_name::SETTINGS_FILE_NAME;
 
 fn check_settings_path_exists(path: &PathBuf) -> Option<PathBuf> {
@@ -61,6 +62,7 @@ pub fn find_settings_file() -> Option<PathBuf> {
         return home;
     }
 
-    let path = Path::new(".");
-    check_settings_file_exists(path)
+    let mut path = canonicalize(PathBuf::from(".")).unwrap();
+    path.push(SETTINGS_FILE_NAME);
+    check_settings_path_exists(&path)
 }
