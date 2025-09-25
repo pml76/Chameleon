@@ -19,29 +19,25 @@ chrono = { workspace = true }
 chrono-tz = { workspace = true }
 cxx-qt-lib-additions = { workspace = true }
 serde_json = {workspace = true}
-chumsky = {workspace = true}
-icu = { workspace = true}
-serde = { version = "1.0.225", features = ["derive"] }
 chameleon_settings = { workspace = true }
 
 
 [build-dependencies]
 # The link_qt_object_files feature is required for statically linking Qt 6.
 cxx-qt-build = { workspace = true }
-cxx-build = { workspace = true }
-conan2 = {workspace = true}
-vcpkg = { workspace = true }
+cxx-build = {workspace = true}
 chameleon_settings = {workspace = true}
 serde_json = {workspace = true}
+vcpkg = {workspace = true}
 
 
 [package.metadata.vcpkg]
 git = "https://github.com/microsoft/vcpkg"
 rev = "120deac3062162151622ca4860575a33844ba10b"
-dependencies = ["fmt:x64-windows-static-md"]
+dependencies = ["icu:x64-windows-static-md"]
 
 [package.metadata.vcpkg.dev]
-x86_64-pc-windows-msvc = { triplet = "x64-windows-static-md", dependencies = ["fmt"] }
+x86_64-pc-windows-msvc = { triplet = "x64-windows-static-md", dependencies = ["icu"] }
 
 [package.metadata.vcpkg.release]
 x86_64-pc-windows-msvc = { triplet = "x64-windows-static" }

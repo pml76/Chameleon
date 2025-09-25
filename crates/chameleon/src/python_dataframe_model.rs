@@ -1,5 +1,5 @@
 ﻿use std::string::String;
-use crate::format::{format_bool, format_f32, format_f64, format_i16, format_i32, format_i64, format_i8, format_str, format_u16, format_u32, format_u64, format_u8};
+use crate::format::{ format_f64 };
 use crate::python_dataframe_model::qobject::DataFrameModel;
 use chrono::NaiveDate;
 use chrono_tz::Tz;
@@ -135,6 +135,7 @@ impl Attache {
     }
     fn prepare_data(&self, value: &AnyValue) -> QVariant {
         match value {
+            /*
             Boolean(b) =>
                 QVariant::from(&QString::from(format_bool(&self.bool_format, b))),
 
@@ -149,7 +150,9 @@ impl Attache {
             Int32(i) => QVariant::from(&QString::from(format_i32(&self.i32_format, i))),
             Int64(i) => QVariant::from(&QString::from(format_i64(&self.i64_format, i))),
             Float32(f) => QVariant::from(&QString::from(format_f32(&self.f32_format, f))),
+            */
             Float64(f) => QVariant::from(&QString::from(format_f64(&self.f64_format, f))),
+
             Date(d) => {
                 let o_date = NaiveDate::from_epoch_days(*d);
                 let naive_date = if let Some(d) = o_date { d } else {

@@ -3,7 +3,6 @@ use std::fs;
 use std::io;
 use std::path::{Path, PathBuf};
 use chameleon_settings::*;
-use conan2::ConanInstall;
 
 pub fn copy_dir_recursive<S: AsRef<Path>, D: AsRef<Path>>(src: S, dst: D) -> io::Result<()> {
     fn copy_dir(src: &Path, dst: &Path) -> io::Result<()> {
@@ -46,19 +45,13 @@ pub fn copy_dir_recursive<S: AsRef<Path>, D: AsRef<Path>>(src: S, dst: D) -> io:
 
 fn main() {
 
-    ConanInstall::new()
-        .build("missing")
-        .run()
-        .parse()
-        .emit();
-
-    let fmt = vcpkg::Config::new().emit_includes(true).find_package("fmt");
+    let lib_icu = vcpkg::Config::new().emit_includes(true).find_package("icu");
     let mut paths : Vec<String> = Vec::new();
-    
-    match fmt {
-        Ok(fmt) => {
-            if !fmt.include_paths.is_empty() {
-                paths = fmt
+
+    match lib_icu {
+        Ok(lib_icu) => {
+            if !lib_icu.include_paths.is_empty() {
+                paths = lib_icu
                     .include_paths
                     .iter()
                     .map(|s| s.display().to_string())
@@ -67,7 +60,7 @@ fn main() {
             }
         }
         Err(e) => {
-            println!("note, vcpkg did not find zlib: {}", e);
+            println!("note, vcpkg did not find icu: {}", e);
         }
     }
 
@@ -83,7 +76,6 @@ fn main() {
     println!("cargo:rerun-if-changed=cpp/format.cpp");
     println!("cargo:rerun-if-changed=cpp/format.h");
     println!("cargo:rerun-if-changed=src/format.rs");
-
     CxxQtBuilder::new()
         // Link Qt's Network library
         // - Qt Core is always linked

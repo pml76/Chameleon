@@ -114,6 +114,8 @@ fn pyo3_test_2() {
 }
 
 fn polars_main() {
+
+
     use chrono::prelude::*;
 
     let df: DataFrame = df!(
@@ -152,6 +154,11 @@ fn pymain() -> PyResult<()> {
     })
 }
 fn main() {
+
+
+    for locale in format::get_available_number_locales() {
+        println!("{}", locale);
+    }
     
     pyo3_test_2();
     pyo3_test_3();
