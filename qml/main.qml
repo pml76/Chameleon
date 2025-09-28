@@ -1,10 +1,10 @@
 import QtQuick
-import QtQuick.Controls
+import QtQuick.Controls.FluentWinUI3
 import QtQuick.Window
 
 // This must match the uri and version
 // specified in the qml_module in the build.rs script.
-import com.kdab.cxx_qt.demo 1.0
+import chameleon.main 1.0
 
 ApplicationWindow {
     height: 480
@@ -23,10 +23,40 @@ ApplicationWindow {
         id: tableModel
     }
 
+    Dialog {
+
+        x: 100
+        y: 100
+
+        id: dialog
+        title: "Title"
+        standardButtons: Dialog.Ok | Dialog.Cancel
+        popupType: Popup.Window
+
+        modal: true
+        dim: true
+
+        onAccepted: console.log("Ok clicked")
+        onRejected: console.log("Cancel clicked")
+    }
+
+    Button {
+        id: button
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+
+        text: "Open Dialog"
+
+        onClicked: dialog.open()
+    }
 
     Rectangle {
 
-        anchors.fill: parent
+        anchors.top: button.bottom
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
 
         HorizontalHeaderView {
             id: horizontalHeader
@@ -67,6 +97,7 @@ ApplicationWindow {
             }
         }
     }
+
 
     /*
     Column {

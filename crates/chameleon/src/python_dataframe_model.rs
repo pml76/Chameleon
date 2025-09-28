@@ -4,7 +4,7 @@ use crate::python_dataframe_model::qobject::DataFrameModel;
 use chrono::NaiveDate;
 use chrono_tz::Tz;
 use cxx_qt::{Constructor, CxxQtType};
-use cxx_qt_lib::{QDate, QDateTime, QModelIndex, QString, QTime, QTimeZone, QVariant};
+use cxx_qt_lib::{QModelIndex, QString, QTime, QVariant};
 use polars::datatypes::AnyValue::*;
 use polars::df;
 use polars::prelude::{AnyValue, CatSize, CategoricalMapping, DataFrame, TimeUnit, TimeZone};
@@ -108,9 +108,6 @@ impl Attache {
         }
     }
 
-    fn name(&self) -> QVariant {
-        QVariant::from(&self.name)
-    }
     fn datetime_to_qvariant(&self, d: &i64, time_unit: &TimeUnit, time_zone: &Option<&TimeZone>) -> QVariant {
 
         let time_zone = if let Some(tz) = time_zone {

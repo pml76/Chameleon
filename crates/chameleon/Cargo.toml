@@ -32,12 +32,10 @@ vcpkg = {workspace = true}
 
 
 [package.metadata.vcpkg]
-git = "https://github.com/microsoft/vcpkg"
-rev = "120deac3062162151622ca4860575a33844ba10b"
-dependencies = ["icu:x64-windows-static-md"]
+git = "https://github.com/pml76/vcpkg.git"
+rev = "1d195a1b4e32bdc23579375287cb5a79a9698380"   # branch with icu 77.1. otherwise standard snapshot
+dependencies = ["icu"]
 
-[package.metadata.vcpkg.dev]
-x86_64-pc-windows-msvc = { triplet = "x64-windows-static-md", dependencies = ["icu"] }
+[package.metadata.vcpkg.target]
+x86_64-pc-windows-msvc = { triplet = "x64-windows-static-md" }
 
-[package.metadata.vcpkg.release]
-x86_64-pc-windows-msvc = { triplet = "x64-windows-static" }

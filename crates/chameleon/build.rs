@@ -64,13 +64,14 @@ fn main() {
         }
     }
 
-    let mut binding = cxx_build::bridge("src/format.rs");
-    let mut cxx_bridge = binding.file("cpp/format.cpp");
+    let mut binding = cxx_build::bridges(["src/format.rs", "src/locale.rs"]);
+    let mut cxx_bridge = binding.files(["cpp/format.cpp", "cpp/locale.cpp"]);
 
     for path in paths {
         cxx_bridge = cxx_bridge.include(path);
     }
     cxx_bridge = cxx_bridge.flag("/utf-8");
+    cxx_bridge = cxx_bridge.flag("/std:c++17");
     cxx_bridge.compile("cxx_format");
 
     println!("cargo:rerun-if-changed=cpp/format.cpp");
@@ -84,11 +85,19 @@ fn main() {
         // - Qt Qml requires linking Qt Network on macOS
         .qt_module("Network")
         .qml_module(QmlModule {
-            uri: "com.kdab.cxx_qt.demo",
+            uri: "chameleon.main",
             rust_files: &[
                 "src/cxxqt_object.rs",
                 "src/table_model.rs",
                 "src/python_dataframe_model.rs",
+            ],
+            qml_files: &["../../qml/main.qml"],
+            ..Default::default()
+        })
+        .qml_module(QmlModule {
+            uri: "chameleon.dialogs.format",
+            rust_files: &[
+                "src/dialogs/format_dialog/format_dialog_model.rs",
             ],
             qml_files: &["../../qml/main.qml"],
             ..Default::default()

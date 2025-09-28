@@ -1,2 +1,0 @@
-[requires]
-icu/77.1

@@ -5,7 +5,7 @@ pub mod python_dataframe_model;
 mod time_and_dates;
 mod format;
 mod dialogs;
-
+mod locale;
 
 use pyo3_polars::*;
 use pyo3::prelude::*;
@@ -17,6 +17,8 @@ use std::ffi::CStr;
 
 use cxx_qt_lib::{QGuiApplication, QQmlApplicationEngine, QUrl};
 use chameleon_settings::get_global_settings_python_base_directory;
+use crate::format::OutputFor;
+use crate::locale::get_locale_information;
 
 const CODE: &CStr = c_str!(r#"
 import polars as pl
@@ -156,10 +158,6 @@ fn pymain() -> PyResult<()> {
 fn main() {
 
 
-    for locale in format::get_available_number_locales() {
-        println!("{}", locale);
-    }
-    
     pyo3_test_2();
     pyo3_test_3();
 
@@ -171,7 +169,7 @@ fn main() {
 
     // Load the QML path into the engine
     if let Some(engine) = engine.as_mut() {
-        engine.load(&QUrl::from("qrc:/qt/qml/com/kdab/cxx_qt/demo/qml/main.qml"));
+        engine.load(&QUrl::from("qrc:/qt/qml/chameleon/main/qml/main.qml"));
     }
 
     if let Some(engine) = engine.as_mut() {
