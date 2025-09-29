@@ -57,44 +57,49 @@ mod qobject {
 
 pub struct FormatDialogModelRust {
     locals:  Vec<LocaleInformation>,
-    current_locale: Option<LocaleInformation>,
     current_index : i32,
+    current_locale: Option<LocaleInformation>,
 
+}
+
+fn find_en_locale(ls: &Vec<LocaleInformation>, mut index: &i32) -> Option<LocaleInformation> {
+    index = &0;
+    
+    for l in ls.iter() {
+        if l.locale_name == "en" {
+            return Some(l.clone());
+        }      
+        index += 1;
+    }
+    
+    None
+    ls.iter().find(|l| l.locale_name == "en").map(Clone::clone)
 }
 
 impl Default for FormatDialogModelRust {
     fn default() -> Self {
         let ls = get_locale_information(OutputFor::AllLocales);
-        let mut index = 0;
-        let mut en_locale = None;
-
-        for l in ls.iter() {
-            if l.locale_name == "en_US" {
-                en_locale = Some(*l.clone());
-                break;
-            }
-            index += 1;
-        }
-
-        FormatDialogModelRust {
+        let mut format_dialog_model = FormatDialogModelRust {
             locals: ls,
-            current_locale: en_locale,
-            current_index : index,
-        }
+            current_index: 0,
+            current_locale: None,
+        };
+
+        let en_locale = find_en_locale(&format_dialog_model.locals);
+
+        format_dialog_model.current_locale = en_locale;
+        format_dialog_model
     }
 }
 
 
 use qobject::*;
+use crate::dialogs::format_dialog_model;
 
 impl qobject::FormatDialogModel {
 
     fn get_current_index(self: &FormatDialogModel) -> i32 {
-        if let Some(_) = &self.rust().current_locale {
-            return self.rust().current_index;
-        }
-
-        0
+        self.rust().current_index
     }
 
     fn column_count(self: &FormatDialogModel, parent: &QModelIndex) -> i32 {

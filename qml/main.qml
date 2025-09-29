@@ -44,7 +44,7 @@ ApplicationWindow {
             model: formatDialogModel
         }
 
-        onAccepted: console.log("Ok clicked")
+        onAccepted: console.log("Ok clicked with value: ", currentValue)
         onRejected: console.log("Cancel clicked")
     }
 
