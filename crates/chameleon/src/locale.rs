@@ -6,6 +6,8 @@ mod ffi_icu {
         type Locale;
 
     }
+
+    #[derive(Copy)]
     struct LocaleInformation {
         locale: *const Locale,
         locale_name: String,

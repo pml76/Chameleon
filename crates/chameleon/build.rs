@@ -87,8 +87,6 @@ fn main() {
         .qml_module(QmlModule {
             uri: "chameleon.main",
             rust_files: &[
-                "src/cxxqt_object.rs",
-                "src/table_model.rs",
                 "src/python_dataframe_model.rs",
             ],
             qml_files: &["../../qml/main.qml"],

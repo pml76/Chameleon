@@ -1,5 +1,3 @@
-pub mod cxxqt_object;
-pub mod table_model;
 pub mod python_interface;
 pub mod python_dataframe_model;
 mod time_and_dates;
@@ -169,7 +167,7 @@ fn main() {
 
     // Load the QML path into the engine
     if let Some(engine) = engine.as_mut() {
-        engine.load(&QUrl::from("qrc:/qt/qml/chameleon/main/qml/main.qml"));
+        engine.load(&QUrl::from("qrc:/qt/qml/chameleon/dialogs/format/qml/main.qml"));
     }
 
     if let Some(engine) = engine.as_mut() {

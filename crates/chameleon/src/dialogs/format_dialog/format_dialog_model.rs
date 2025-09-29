@@ -1,15 +1,14 @@
 ﻿use cxx_qt::CxxQtType;
 use cxx_qt_lib::QByteArray;
 use cxx_qt_lib_additions::ItemDataRole;
-use crate::dialogs::format_dialog_model::qobject::FormatDialogModel;
-use crate::locale::{get_locale_information, LocaleInformation, OutputFor};
+use crate::locale::{LocaleInformation, get_locale_information, OutputFor};
 
 #[cxx_qt::bridge]
 mod qobject {
 
     unsafe extern "C++" {
-        include!(<QAbstractItemModel>);
-        type QAbstractItemModel;
+        include!(<QAbstractTableModel>);
+        type QAbstractTableModel;
 
         include!("cxx-qt-lib/qmodelindex.h");
         type QModelIndex = cxx_qt_lib::QModelIndex;
@@ -22,11 +21,15 @@ mod qobject {
 
         include!("cxx-qt-lib/qhash.h");
         type QHash_i32_QByteArray = cxx_qt_lib::QHash<cxx_qt_lib::QHashPair_i32_QByteArray>;
+
+        #[namespace = "Qt"]
+        type Orientation = cxx_qt_lib_additions::Orientation;
     }
+
     unsafe extern "RustQt" {
         #[qobject]
         #[qml_element]
-        #[base = QAbstractItemModel]
+        #[base = QAbstractTableModel]
         type FormatDialogModel = super::FormatDialogModelRust;
 
         #[cxx_override]
@@ -44,18 +47,39 @@ mod qobject {
         #[cxx_override]
         #[rust_name = "role_names"]
         fn roleNames(self: &FormatDialogModel) -> QHash_i32_QByteArray;
+
+        #[rust_name = "get_current_index"]
+        #[qinvokable]
+        fn getCurrentIndex(self: &FormatDialogModel) -> i32;
+
     }
 }
 
 pub struct FormatDialogModelRust {
-    locals: Vec<LocaleInformation>,
+    locals:  Vec<LocaleInformation>,
+    current_locale: Option<LocaleInformation>,
+    current_index : i32,
 
 }
 
 impl Default for FormatDialogModelRust {
     fn default() -> Self {
+        let ls = get_locale_information(OutputFor::AllLocales);
+        let mut index = 0;
+        let mut en_locale = None;
+
+        for l in ls.iter() {
+            if l.locale_name == "en_US" {
+                en_locale = Some(*l.clone());
+                break;
+            }
+            index += 1;
+        }
+
         FormatDialogModelRust {
-            locals: get_locale_information(OutputFor::AllLocales),
+            locals: ls,
+            current_locale: en_locale,
+            current_index : index,
         }
     }
 }
@@ -64,6 +88,15 @@ impl Default for FormatDialogModelRust {
 use qobject::*;
 
 impl qobject::FormatDialogModel {
+
+    fn get_current_index(self: &FormatDialogModel) -> i32 {
+        if let Some(_) = &self.rust().current_locale {
+            return self.rust().current_index;
+        }
+
+        0
+    }
+
     fn column_count(self: &FormatDialogModel, parent: &QModelIndex) -> i32 {
         1
     }
@@ -74,7 +107,9 @@ impl qobject::FormatDialogModel {
 
     fn role_names(self: &FormatDialogModel) -> QHash_i32_QByteArray {
         let mut hash = QHash_i32_QByteArray::default();
-        hash.insert(ItemDataRole::DisplayRole.repr, QByteArray::from("locale_display_name"));
+        hash.insert(ItemDataRole::DisplayRole.repr, QByteArray::from("text"));
+        hash.insert(ItemDataRole::EditRole.repr, QByteArray::from("value"));
+
         hash
     }
 
