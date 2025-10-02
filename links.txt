@@ -7,8 +7,42 @@ https://github.com/pola-rs/polars/issues/24109
 so long supported version is:
 pip install polars[all]==1.31 (obsolete)
 
-pip install polars[all]==1.33.1 (works, too)
 
+**** SETUP ****
+
+- install python
+- install Visual Studio 2022
+- install Qt 6.9.2
+- Optional: install RustRover and CLion
+- install rust using rustup
+- install git
+
+- clone repo in, say, C:\GitHub\Chameleon
+- create venv using 'python -m venv C:\GitHub\Chameleon\.venv'
+- activate venv using 'C:\GitHub\Chameleon\.venv\Scripts\activate'
+- install polars using 'pip install polars[all]==1.33.1'
+
+- install rust-vcpkg using 'cargo install cargo-vcpkg'
+- cd to C:\GitHub\Chameleon\crates\chameleon
+- run 'cargo vcpkg build'
+
+- cd to C:\GitHub\Chameleon\
+- adjust the entry for PYO3_PYTHON in the file .\.cargo\config.toml to reflect your installation directory
+- run 'cargo run'
+
+
+*** CLion Setup ***
+
+- open the file C:\GitHub\Chameleon\crates\chameleon\cpp\CMakeLists.txt using CLion
+- setup vcpkg in CLion using directory C:\GitHub\Chameleon\target\vcpkg
+- install icu using vcpkg
+- build using cmake
+
+
+*** QtCreator Setup ***
 
 run QtCreator from shell after setting the environment variable:
 $env:QML_IMPORT_PATH="C:\path\to\project\target\debug\qml_modules"
+
+
+
