@@ -116,7 +116,13 @@ fn main() {
         format!("{}/qt-build-utils/qml_modules", out_dir),
         format!("{}/../../../qml_modules", out_dir),
     )
-    .unwrap();
+    .unwrap(); 
+    
+ //   copy_dir_recursive(
+ //       format!("{}/cxxbridge/", out_dir),
+ //       format!("{}/../../../cxx-bridge", out_dir),
+ //   )
+ //   .unwrap();
 
     let mut loc_dir = PathBuf::from(out_dir.clone());
     loc_dir.pop();

@@ -12,7 +12,8 @@ target_include_directories(icu INTERFACE ${ICU_INCLUDE_DIRS})
 
 
 add_library(test STATIC enums.h format.h icu_includes.h locale.h format.cpp locale.cpp)
-# target_include_directories()
+target_include_directories( test PUBLIC "C:\\Users\\U439644\\Projects\\Chameleon\\target\\debug\\cxxbridge\\include" )
+target_include_directories( test PUBLIC "C:\\Users\\U439644\\Projects\\Chameleon\\target\\debug\\cxxbridge\\crate" )
 target_link_libraries(test icu)
 
 
