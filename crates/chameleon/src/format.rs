@@ -3,6 +3,12 @@
 #[cxx::bridge]
 mod ffi {
 
+    unsafe extern "C++" {
+        include!("chameleon/cpp/icu_includes.h");
+        type Locale = crate::locale::Locale;
+
+    }
+
     #[repr(i32)]
     enum OutputKind {
         DisplayName = 0,
@@ -30,9 +36,7 @@ mod ffi {
     unsafe extern "C++" {
         include!("chameleon/cpp/format.h");
 
-        //type Locale = crate::locale::Locale;
-
-        fn format_f64(fmt_str: &String, d: &f64) -> String;
+        unsafe fn format_f64(locale: *const Locale, d: &f64) -> String;
         
 
     }

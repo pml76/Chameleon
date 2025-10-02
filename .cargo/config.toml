@@ -3,5 +3,5 @@
 # pyo3 has to get instructed which python to use for compilation.
 # We choose the local one here.
 [env]
-PYO3_PYTHON = "c:\\GitHub\\Chameleon\\.venv\\Scripts\\python.exe"
-# PYO3_PYTHON = "c:\\Users\\U439644\\Projects\\Chameleon\\.venv\\Scripts\\python.exe"
+# PYO3_PYTHON = "c:\\GitHub\\Chameleon\\.venv\\Scripts\\python.exe"
+PYO3_PYTHON = "c:\\Users\\U439644\\Projects\\Chameleon\\.venv\\Scripts\\python.exe"

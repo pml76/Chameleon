@@ -148,7 +148,7 @@ impl Attache {
             Int64(i) => QVariant::from(&QString::from(format_i64(&self.i64_format, i))),
             Float32(f) => QVariant::from(&QString::from(format_f32(&self.f32_format, f))),
             */
-            Float64(f) => QVariant::from(&QString::from(format_f64(&self.f64_format, f))),
+            Float64(f) => QVariant::default(), // QVariant::from(&QString::from(format_f64(&self.f64_format, f))),
 
             Date(d) => {
                 let o_date = NaiveDate::from_epoch_days(*d);
