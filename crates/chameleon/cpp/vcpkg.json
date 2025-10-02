@@ -1,0 +1,9 @@
+{
+  "name" : "test",
+  "version-string" : "1.0.0",
+  "builtin-baseline" : "120deac3062162151622ca4860575a33844ba10b",
+  "dependencies" : [ {
+    "name" : "icu",
+    "version>=" : "74.2#6"
+  } ]
+}
