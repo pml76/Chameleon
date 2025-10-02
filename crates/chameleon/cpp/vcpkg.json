@@ -1,9 +1,0 @@
-{
-  "name" : "cpp",
-  "version-string" : "1.0.0",
-  "builtin-baseline" : "1d195a1b4e32bdc23579375287cb5a79a9698380",
-  "dependencies" : [ {
-    "name" : "icu",
-    "version>=" : "77.1"
-  } ]
-}

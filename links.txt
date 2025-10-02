@@ -35,7 +35,6 @@ pip install polars[all]==1.31 (obsolete)
 
 - open the file C:\GitHub\Chameleon\crates\chameleon\cpp\CMakeLists.txt using CLion
 - setup vcpkg in CLion using directory C:\GitHub\Chameleon\target\vcpkg
-- install icu using vcpkg
 - build using cmake
 
 

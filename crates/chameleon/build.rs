@@ -118,11 +118,11 @@ fn main() {
     )
     .unwrap(); 
     
- //   copy_dir_recursive(
- //       format!("{}/cxxbridge/", out_dir),
- //       format!("{}/../../../cxx-bridge", out_dir),
- //   )
- //   .unwrap();
+    copy_dir_recursive(
+        format!("{}/cxxbridge/", out_dir),
+        format!("{}/../../../cxxbridge", out_dir),
+    )
+    .unwrap();
 
     let mut loc_dir = PathBuf::from(out_dir.clone());
     loc_dir.pop();
