@@ -39,6 +39,8 @@ ApplicationWindow {
         ComboBox {
             id: myComboBox
 
+            currentIndex: formatDialogModel.getCurrentIndex()
+
             textRole: "text"
             valueRole: "value"
             model: formatDialogModel

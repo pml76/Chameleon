@@ -57,23 +57,21 @@ mod qobject {
 
 pub struct FormatDialogModelRust {
     locals:  Vec<LocaleInformation>,
-    current_index : i32,
-    current_locale: Option<LocaleInformation>,
+    current_index : Option<i32>,
 
 }
 
-fn find_en_locale(ls: &Vec<LocaleInformation>, mut index: &i32) -> Option<LocaleInformation> {
-    index = &0;
+fn find_en_locale(ls: &Vec<LocaleInformation>) -> Option<i32> {
+     let mut index = 0;
     
     for l in ls.iter() {
         if l.locale_name == "en" {
-            return Some(l.clone());
+            return Some(index)
         }      
         index += 1;
     }
     
     None
-    ls.iter().find(|l| l.locale_name == "en").map(Clone::clone)
 }
 
 impl Default for FormatDialogModelRust {
@@ -81,32 +79,33 @@ impl Default for FormatDialogModelRust {
         let ls = get_locale_information(OutputFor::AllLocales);
         let mut format_dialog_model = FormatDialogModelRust {
             locals: ls,
-            current_index: 0,
-            current_locale: None,
+            current_index: None,
         };
 
-        let en_locale = find_en_locale(&format_dialog_model.locals);
+        let en_index = find_en_locale(&format_dialog_model.locals);
 
-        format_dialog_model.current_locale = en_locale;
+        format_dialog_model.current_index = en_index;
         format_dialog_model
     }
 }
 
 
 use qobject::*;
-use crate::dialogs::format_dialog_model;
 
 impl qobject::FormatDialogModel {
 
     fn get_current_index(self: &FormatDialogModel) -> i32 {
-        self.rust().current_index
+        if let Some(index) = self.rust().current_index {
+            return index;
+        }
+        0
     }
 
-    fn column_count(self: &FormatDialogModel, parent: &QModelIndex) -> i32 {
+    fn column_count(self: &FormatDialogModel, _parent: &QModelIndex) -> i32 {
         1
     }
 
-    fn row_count(self: &FormatDialogModel, parent: &QModelIndex) -> i32 {
+    fn row_count(self: &FormatDialogModel, _parent: &QModelIndex) -> i32 {
         self.rust().locals.len() as i32
     }
 
