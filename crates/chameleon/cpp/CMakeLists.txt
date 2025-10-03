@@ -11,9 +11,17 @@ target_include_directories(icu INTERFACE ${ICU_INCLUDE_DIRS})
 
 
 
-add_library(test STATIC enums.h format.h icu_includes.h locale.h format.cpp locale.cpp)
+add_library(test STATIC
+        includes/enums.h
+        includes/icu_includes.h
+        dialogs/format_dialog/locale.h
+        dialogs/format_dialog/locale.cpp
+        dialogs/format_dialog/format.h
+        dialogs/format_dialog/format.cpp
+         )
 target_include_directories( test PUBLIC "${CMAKE_SOURCE_DIR}/../../../target/debug/cxxbridge/include" )
 target_include_directories( test PUBLIC "${CMAKE_SOURCE_DIR}/../../../target/debug/cxxbridge/crate" )
+target_include_directories( test PUBLIC "${CMAKE_SOURCE_DIR}/includes")
 set_property(TARGET test PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreadedDLL")
 target_link_libraries(test icu)
 

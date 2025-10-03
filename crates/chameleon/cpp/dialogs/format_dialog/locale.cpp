@@ -1,7 +1,7 @@
-﻿#include "chameleon/cpp/icu_includes.h"
-#include "chameleon/cpp/locale.h"
-#include "chameleon/cpp/enums.h"
-#include "chameleon/src/locale.rs.h"
+﻿#include "chameleon/cpp/includes/icu_includes.h"
+#include "chameleon/cpp/dialogs/format_dialog/locale.h"
+#include "chameleon/cpp/includes/enums.h"
+#include "chameleon/src/dialogs/format_dialog/locale.cxx.h"
 
 rust::Vec<LocaleInformation> get_locale_information(OutputFor output_for) {
     rust::Vec<LocaleInformation> locale_info;

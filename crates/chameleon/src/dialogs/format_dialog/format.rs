@@ -1,11 +1,11 @@
-﻿use crate::locale;
+﻿use crate::dialogs::format_dialog::locale;
 
 #[cxx::bridge]
 mod ffi {
 
     unsafe extern "C++" {
-        include!("chameleon/cpp/icu_includes.h");
-        type Locale = crate::locale::Locale;
+        include!("chameleon/cpp/includes/icu_includes.h");
+        type Locale = crate::dialogs::format_dialog::locale::Locale;
 
     }
 
@@ -16,7 +16,7 @@ mod ffi {
         BaseName = 2,
     }
     unsafe extern "C++" {
-        include!("chameleon/cpp/enums.h");
+        include!("chameleon/cpp/includes/enums.h");
         type OutputKind;
     }
 
@@ -28,13 +28,13 @@ mod ffi {
     }
 
     extern "C++" {
-        include!("chameleon/cpp/enums.h");
+        include!("chameleon/cpp/includes/enums.h");
         type OutputFor;
 
     }
 
     unsafe extern "C++" {
-        include!("chameleon/cpp/format.h");
+        include!("chameleon/cpp/dialogs/format_dialog/format.h");
 
         unsafe fn format_f64(locale: *const Locale, d: &f64) -> String;
         

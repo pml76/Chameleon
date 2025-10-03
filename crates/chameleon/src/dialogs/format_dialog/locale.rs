@@ -1,7 +1,7 @@
-﻿#[cxx::bridge]
+﻿#[cxx_qt::bridge]
 mod ffi_icu {
     unsafe extern "C++" {
-        include!("chameleon/cpp/icu_includes.h");
+        include!("chameleon/cpp/includes/icu_includes.h");
 
         type Locale;
 
@@ -16,9 +16,9 @@ mod ffi_icu {
     }
 
     unsafe extern "C++" {
-        include!("chameleon/cpp/locale.h");
+        include!("chameleon/cpp/dialogs/format_dialog/locale.h");
 
-        type OutputFor = crate::format::OutputFor;
+        type OutputFor = crate::dialogs::format_dialog::format::OutputFor;
         fn get_locale_information(output_for: OutputFor) -> Vec<LocaleInformation>;
     }
 }

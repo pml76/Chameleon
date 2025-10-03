@@ -1,9 +1,7 @@
 pub mod python_interface;
 pub mod python_dataframe_model;
 mod time_and_dates;
-mod format;
 mod dialogs;
-mod locale;
 
 use pyo3_polars::*;
 use pyo3::prelude::*;
@@ -15,8 +13,8 @@ use std::ffi::CStr;
 
 use cxx_qt_lib::{QGuiApplication, QQmlApplicationEngine, QUrl};
 use chameleon_settings::get_global_settings_python_base_directory;
-use crate::format::OutputFor;
-use crate::locale::get_locale_information;
+use crate::dialogs::format_dialog::format::OutputFor;
+use crate::dialogs::format_dialog::locale::get_locale_information;
 
 const CODE: &CStr = c_str!(r#"
 import polars as pl

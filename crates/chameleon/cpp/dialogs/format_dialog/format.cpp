@@ -1,6 +1,6 @@
 ﻿#include "format.h"
 #include <unicode/numberformatter.h>
-#include "chameleon/src/locale.rs.h"
+#include "chameleon/src/dialogs/format_dialog/locale.cxx.h"
 
 rust::String format_f64(const Locale *locale, const double &d) {
     auto l = icu_77::number::NumberFormatter::with();

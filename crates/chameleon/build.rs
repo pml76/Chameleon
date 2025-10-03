@@ -45,6 +45,8 @@ pub fn copy_dir_recursive<S: AsRef<Path>, D: AsRef<Path>>(src: S, dst: D) -> io:
 
 fn main() {
 
+    let out_dir = std::env::var("OUT_DIR").unwrap();
+    let cargo_manifest_dir = PathBuf::from(std::env::var("CARGO_MANIFEST_DIR").unwrap().as_str());
     let lib_icu = vcpkg::Config::new().emit_includes(true).find_package("icu");
     let mut paths : Vec<String> = Vec::new();
 
@@ -64,19 +66,7 @@ fn main() {
         }
     }
 
-    let mut binding = cxx_build::bridges(["src/format.rs", "src/locale.rs"]);
-    let mut cxx_bridge = binding.files(["cpp/format.cpp", "cpp/locale.cpp"]);
 
-    for path in paths {
-        cxx_bridge = cxx_bridge.include(path);
-    }
-    cxx_bridge = cxx_bridge.flag("/utf-8");
-    cxx_bridge = cxx_bridge.flag("/std:c++17");
-    cxx_bridge.compile("cxx_format");
-
-    println!("cargo:rerun-if-changed=cpp/format.cpp");
-    println!("cargo:rerun-if-changed=cpp/format.h");
-    println!("cargo:rerun-if-changed=src/format.rs");
     CxxQtBuilder::new()
         // Link Qt's Network library
         // - Qt Core is always linked
@@ -95,18 +85,29 @@ fn main() {
         .qml_module(QmlModule {
             uri: "chameleon.dialogs.format",
             rust_files: &[
-                "src/dialogs/format_dialog/format_dialog_model.rs",
+                "src/dialogs/format_dialog/locale_selector_model.rs",
+                "src/dialogs/format_dialog/format.rs",
+                "src/dialogs/format_dialog/locale.rs"
             ],
             qml_files: &["../../qml/main.qml"],
             ..Default::default()
         })
+        .cc_builder(|cc| {
+            cc.includes(paths.clone());
+            cc.include(cargo_manifest_dir.clone().join(".."));
+            cc.flag("/utf-8");
+            cc.flag("/std:c++17");
+            cc.files(["cpp/dialogs/format_dialog/format.cpp", "cpp/dialogs/format_dialog/locale.cpp"]);
+
+        })
         .build();
 
-    let out_dir = std::env::var("OUT_DIR").unwrap();
-    let mut cargo_manifest_dir = PathBuf::from(std::env::var("CARGO_MANIFEST_DIR").unwrap().as_str());
-    cargo_manifest_dir.pop();
-    cargo_manifest_dir.pop();
-    let python_dir = cargo_manifest_dir.join(".venv");
+
+
+    let mut python_dir = PathBuf::from(cargo_manifest_dir.clone());
+    python_dir.pop();
+    python_dir.pop();
+    python_dir = python_dir.join(".venv");
 
     if !python_dir.exists() {
         panic!("Python virtual environment not found. Please create it first by running `python -m venv .venv` in the project root directory.");
@@ -117,13 +118,14 @@ fn main() {
         format!("{}/../../../qml_modules", out_dir),
     )
     .unwrap(); 
-    
+
+    /*
     copy_dir_recursive(
         format!("{}/cxxbridge/", out_dir),
         format!("{}/../../../cxxbridge", out_dir),
     )
     .unwrap();
-
+*/
     let mut loc_dir = PathBuf::from(out_dir.clone());
     loc_dir.pop();
     loc_dir.pop();

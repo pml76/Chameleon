@@ -1,7 +1,7 @@
 ﻿use cxx_qt::CxxQtType;
 use cxx_qt_lib::QByteArray;
 use cxx_qt_lib_additions::ItemDataRole;
-use crate::locale::{LocaleInformation, get_locale_information, OutputFor};
+use crate::dialogs::format_dialog::locale::{LocaleInformation, get_locale_information, OutputFor};
 
 #[cxx_qt::bridge]
 mod qobject {
@@ -30,32 +30,32 @@ mod qobject {
         #[qobject]
         #[qml_element]
         #[base = QAbstractTableModel]
-        type FormatDialogModel = super::FormatDialogModelRust;
+        type LocaleSelectorModel = super::LocaleSelectorModelRust;
 
         #[cxx_override]
         #[rust_name = "column_count"]
-        fn columnCount(self: &FormatDialogModel, parent: &QModelIndex) -> i32;
+        fn columnCount(self: &LocaleSelectorModel, parent: &QModelIndex) -> i32;
 
         #[cxx_override]
         #[rust_name = "row_count"]
-        fn rowCount(self: &FormatDialogModel, parent: &QModelIndex) -> i32;
+        fn rowCount(self: &LocaleSelectorModel, parent: &QModelIndex) -> i32;
 
         #[cxx_override]
         #[rust_name = "data"]
-        fn data(self: &FormatDialogModel, index: &QModelIndex, role: i32) -> QVariant;
+        fn data(self: &LocaleSelectorModel, index: &QModelIndex, role: i32) -> QVariant;
 
         #[cxx_override]
         #[rust_name = "role_names"]
-        fn roleNames(self: &FormatDialogModel) -> QHash_i32_QByteArray;
+        fn roleNames(self: &LocaleSelectorModel) -> QHash_i32_QByteArray;
 
         #[rust_name = "get_current_index"]
         #[qinvokable]
-        fn getCurrentIndex(self: &FormatDialogModel) -> i32;
+        fn getCurrentIndex(self: &LocaleSelectorModel) -> i32;
 
     }
 }
 
-pub struct FormatDialogModelRust {
+pub struct LocaleSelectorModelRust {
     locals:  Vec<LocaleInformation>,
     current_index : Option<i32>,
 
@@ -74,10 +74,10 @@ fn find_en_locale(ls: &Vec<LocaleInformation>) -> Option<i32> {
     None
 }
 
-impl Default for FormatDialogModelRust {
+impl Default for LocaleSelectorModelRust {
     fn default() -> Self {
         let ls = get_locale_information(OutputFor::AllLocales);
-        let mut format_dialog_model = FormatDialogModelRust {
+        let mut format_dialog_model = LocaleSelectorModelRust {
             locals: ls,
             current_index: None,
         };
@@ -92,24 +92,24 @@ impl Default for FormatDialogModelRust {
 
 use qobject::*;
 
-impl qobject::FormatDialogModel {
+impl qobject::LocaleSelectorModel {
 
-    fn get_current_index(self: &FormatDialogModel) -> i32 {
+    fn get_current_index(self: &LocaleSelectorModel) -> i32 {
         if let Some(index) = self.rust().current_index {
             return index;
         }
         0
     }
 
-    fn column_count(self: &FormatDialogModel, _parent: &QModelIndex) -> i32 {
+    fn column_count(self: &LocaleSelectorModel, _parent: &QModelIndex) -> i32 {
         1
     }
 
-    fn row_count(self: &FormatDialogModel, _parent: &QModelIndex) -> i32 {
+    fn row_count(self: &LocaleSelectorModel, _parent: &QModelIndex) -> i32 {
         self.rust().locals.len() as i32
     }
 
-    fn role_names(self: &FormatDialogModel) -> QHash_i32_QByteArray {
+    fn role_names(self: &LocaleSelectorModel) -> QHash_i32_QByteArray {
         let mut hash = QHash_i32_QByteArray::default();
         hash.insert(ItemDataRole::DisplayRole.repr, QByteArray::from("text"));
         hash.insert(ItemDataRole::EditRole.repr, QByteArray::from("value"));
@@ -117,7 +117,7 @@ impl qobject::FormatDialogModel {
         hash
     }
 
-    fn data(self: &FormatDialogModel, index: &QModelIndex, role: i32) -> QVariant {
+    fn data(self: &LocaleSelectorModel, index: &QModelIndex, role: i32) -> QVariant {
         if role != ItemDataRole::DisplayRole.repr {
             return QVariant::default();
         }

@@ -19,7 +19,7 @@ ApplicationWindow {
         id: tableModel
     }
 
-    FormatDialogModel {
+    LocaleSelectorModel {
         id: formatDialogModel
     }
 
