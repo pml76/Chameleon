@@ -1,3 +1,4 @@
+use crate::dialogs::format_dialog::notion_selector_model::ffi::ENotion;
 
 /**
   * Holds the Model for the notion of a number format.
@@ -5,16 +6,16 @@
 
 #[cxx_qt::bridge]
 mod ffi {
+    #[repr(i32)]
     enum ENotion {
         Scientific = 0,
         Engineering = 1,
         CompactShort = 2,
         CompactLong = 3,
-        Simplex = 4,
+        Simple = 4,
     }
 
     unsafe extern "C++" {
-        type ENotion;
 
         include!(<QAbstractTableModel>);
         type QAbstractTableModel;
@@ -43,4 +44,14 @@ mod ffi {
 
 pub struct NotionSelectorModelRust {
     notions: Vec<ENotion>,
+    strings: Vec<String>,
+}
+
+impl Default for NotionSelectorModelRust {
+    fn default() -> Self {
+        Self {
+            notions: vec![ENotion::Scientific, ENotion::Engineering, ENotion::CompactShort, ENotion::CompactLong, ENotion::Simple],
+            strings: vec!["Scientific".to_string(), "Engineering".to_string(), "Compact Short".to_string(), "Compact Long".to_string(), "Simple".to_string()],
+        }
+    }
 }

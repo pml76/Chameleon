@@ -79,7 +79,7 @@ fn main() {
             rust_files: &[
                 "src/python_dataframe_model.rs",
             ],
-            qml_files: &["../../qml/main.qml"],
+            qml_files: &["../../qml/main.qml", "../../qml/FormatDialog.qml"],
             ..Default::default()
         })
         .qml_module(QmlModule {
@@ -87,9 +87,11 @@ fn main() {
             rust_files: &[
                 "src/dialogs/format_dialog/locale_selector_model.rs",
                 "src/dialogs/format_dialog/format.rs",
-                "src/dialogs/format_dialog/locale.rs"
+                "src/dialogs/format_dialog/locale.rs",
+                "src/dialogs/format_dialog/number_sign_display_selector_model.rs",
+                "src/dialogs/format_dialog/notion_selector_model.rs",
             ],
-            qml_files: &["../../qml/main.qml"],
+            qml_files: &["../../qml/FormatDialog.qml"],
             ..Default::default()
         })
         .cc_builder(|cc| {
@@ -119,24 +121,20 @@ fn main() {
     )
     .unwrap(); 
 
-    /*
+
     copy_dir_recursive(
-        format!("{}/cxxbridge/", out_dir),
-        format!("{}/../../../cxxbridge", out_dir),
+        format!("{}/cxxqtbuild/", out_dir),
+        format!("{}/../../../cxxqtbuild", out_dir),
     )
     .unwrap();
-*/
-    let mut loc_dir = PathBuf::from(out_dir.clone());
-    loc_dir.pop();
-    loc_dir.pop();
-    loc_dir.pop();
-    loc_dir.pop();
-    loc_dir.pop();
-    loc_dir.push("cldr-json");
-    loc_dir.push("cldr-json");
+
+    let mut qml_dir = PathBuf::from(cargo_manifest_dir.clone());
+    qml_dir.pop();
+    qml_dir.pop();
+    qml_dir.push("qml");
 
     let settings = GlobalSettings {
-        locales_directory: PathBuf::from(loc_dir.to_str().unwrap()),
+        qml_directory: qml_dir,
         default_locale: "en".to_string(),
         python_base_directory: PathBuf::from(python_dir.clone()),
     };

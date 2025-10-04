@@ -14,37 +14,12 @@ ApplicationWindow {
     width: 640
     color: palette.window
 
-
     DataFrameModel {
         id: tableModel
     }
 
-    LocaleSelectorModel {
-        id: formatDialogModel
-    }
-
-    Dialog {
-
-        x: 100
-        y: 100
-
+    FormatDialog {
         id: dialog
-        title: "Title"
-        standardButtons: Dialog.Ok | Dialog.Cancel
-        popupType: Popup.Window
-
-        modal: true
-        dim: true
-
-        ComboBox {
-            id: myComboBox
-
-            currentIndex: formatDialogModel.getCurrentIndex()
-
-            textRole: "text"
-            valueRole: "value"
-            model: formatDialogModel
-        }
 
         onAccepted: console.log("Ok clicked with value: ", currentValue)
         onRejected: console.log("Cancel clicked")
@@ -60,8 +35,6 @@ ApplicationWindow {
 
         onClicked: dialog.open()
     }
-
-
 
     Rectangle {
 

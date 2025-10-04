@@ -5,9 +5,9 @@ use crate::find_settings_file::find_settings_file;
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct GlobalSettings {
-    pub locales_directory: PathBuf,
     pub python_base_directory: PathBuf,
     pub default_locale: String,
+    pub qml_directory: PathBuf,
 }
 
 impl GlobalSettings {
@@ -36,20 +36,31 @@ pub fn get_global_settings() -> Option<GlobalSettings> {
 }
 static GLOBAL_SETTINGS: Mutex<Option<GlobalSettings>> = Mutex::new(None);
 
-pub fn get_global_settings_locales_directory() -> PathBuf {
-
+pub fn get_global_settings_qml_directory() -> PathBuf {
     let mut gs = GLOBAL_SETTINGS.lock().unwrap();
-
     if gs.as_ref().is_none() {
         *gs = get_global_settings();
     }
-
     if let Some(gs) = gs.as_ref() {
-        return gs.locales_directory.clone();
+        return gs.qml_directory.clone();
     }
-    panic!("Failed to load global settings to find locales directory");
-
+    panic!("Failed to load global settings to find qml directory");
 }
+
+pub fn get_global_settings_default_locale() -> String {
+    let mut gs = GLOBAL_SETTINGS.lock().unwrap();
+    
+    if gs.as_ref().is_none() {
+        *gs = get_global_settings();
+    }
+    
+    if let Some(gs) = gs.as_ref() {
+        return gs.default_locale.clone();
+    }
+    panic!("Failed to load global settings to find default locale");
+}
+
+
 pub fn get_global_settings_python_base_directory() -> PathBuf {
     let mut gs = GLOBAL_SETTINGS.lock().unwrap();
 

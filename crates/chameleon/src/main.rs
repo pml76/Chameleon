@@ -11,8 +11,8 @@ use pyo3::ffi::c_str;
 use std::ffi::CStr;
 
 
-use cxx_qt_lib::{QGuiApplication, QQmlApplicationEngine, QUrl};
-use chameleon_settings::get_global_settings_python_base_directory;
+use cxx_qt_lib::{QGuiApplication, QQmlApplicationEngine, QString, QUrl};
+use chameleon_settings::{get_global_settings_python_base_directory, get_global_settings_qml_directory};
 use crate::dialogs::format_dialog::format::OutputFor;
 use crate::dialogs::format_dialog::locale::get_locale_information;
 
@@ -165,7 +165,15 @@ fn main() {
 
     // Load the QML path into the engine
     if let Some(engine) = engine.as_mut() {
-        engine.load(&QUrl::from("qrc:/qt/qml/chameleon/dialogs/format/qml/main.qml"));
+        let qml_directory = get_global_settings_qml_directory();
+        engine.add_import_path(&QString::from(qml_directory.to_str().unwrap()));
+    }
+    
+    if let Some(engine) = engine.as_mut() {
+        let main_qml_file = get_global_settings_qml_directory().join("main.qml");
+        let url = QUrl::from_local_file(&QString::from(main_qml_file.to_str().unwrap()));
+        engine.load(&url);
+        println!("qml_directory: {:?}", main_qml_file);
     }
 
     if let Some(engine) = engine.as_mut() {
