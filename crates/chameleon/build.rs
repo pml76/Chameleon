@@ -82,7 +82,7 @@ fn main() {
             qml_files: &["../../qml/main.qml", "../../qml/FormatDialog.qml"],
             ..Default::default()
         })
-        .qml_module(QmlModule {
+        .qml_module(QmlModule::<&str, &str> {
             uri: "chameleon.dialogs.format",
             rust_files: &[
                 "src/dialogs/format_dialog/locale_selector_model.rs",
@@ -91,7 +91,7 @@ fn main() {
                 "src/dialogs/format_dialog/number_sign_display_selector_model.rs",
                 "src/dialogs/format_dialog/notion_selector_model.rs",
             ],
-            qml_files: &["../../qml/FormatDialog.qml"],
+            qml_files: &[],
             ..Default::default()
         })
         .cc_builder(|cc| {
