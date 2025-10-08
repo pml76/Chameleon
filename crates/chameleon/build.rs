@@ -79,7 +79,7 @@ fn main() {
             rust_files: &[
                 "src/python_dataframe_model.rs",
             ],
-            qml_files: &["../../qml/main.qml", "../../qml/FormatDialog.qml"],
+            qml_files: &["../../qml/main.qml"],
             ..Default::default()
         })
         .qml_module(QmlModule::<&str, &str> {
@@ -91,7 +91,7 @@ fn main() {
                 "src/dialogs/format_dialog/number_sign_display_selector_model.rs",
                 "src/dialogs/format_dialog/notion_selector_model.rs",
             ],
-            qml_files: &[],
+            qml_files: &["../../qml/FormatDialog.qml"],
             ..Default::default()
         })
         .cc_builder(|cc| {

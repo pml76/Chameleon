@@ -1,11 +1,11 @@
 [workspace]
-members = ["xtask/", "crates/*"]
+members = ["xtask/*", "crates/*"]
 resolver = "3"
 
 [workspace.dependencies]
 cxx = "1.0.186"
-cxx-qt = "0.7.3"
-cxx-qt-lib = { version="0.7.3", features = ["qt_full"] }
+cxx-qt = {path = "../cxx-qt/crates/cxx-qt"}
+cxx-qt-lib = { path = "../cxx-qt/crates/cxx-qt-lib", features = ["qt_full"] }
 pyo3 = { version = "0.25.1", features = ["extension-module", "auto-initialize", "abi3", "macros"] }
 polars = { version = "0.51.0", features = ["timezones"] }
 pyo3-polars = "0.24.0"
@@ -14,7 +14,7 @@ chrono-tz = { version = "0.10.4", features = ["case-insensitive"]}
 cxx-qt-lib-additions = { path = "crates/cxx-qt-lib-additions"}
 
 # The link_qt_object_files feature is required for statically linking Qt 6.
-cxx-qt-build = { version = "0.7.3", features = [ "link_qt_object_files" ] }
+cxx-qt-build = { path = "../cxx-qt/crates/cxx-qt-build", features = [ "link_qt_object_files" ] }
 cxx-build = { version = "1.0.186" }
 serde_json = { version = "1.0.145", features = ["indexmap"] }
 serde = {version = "1.0.228", features = ["derive"]}
