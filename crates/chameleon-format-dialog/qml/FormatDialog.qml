@@ -17,26 +17,18 @@ Dialog {
     modal: true
     dim: true
 
-    onAccepted: {
-        numberSignDisplaySelectorModel.selectedNumberSignDisplay = numberSignDisplaySelectorBox.currentValue
-        console.log(" numberSignDisplaySelectorModel.selectedNumberSignDisplay set to: ", numberSignDisplaySelectorBox.currentText)
-    }
-
     FormatDialogModel {
         id: formatDialogModel
     }
-
-    LocaleSelectorModel {
-        id: localeSelectorModel
-    }
-
-    NumberSignDisplaySelectorModel {
-        id: numberSignDisplaySelectorModel
-    }
+    
 
     ComboBox {
         id: localeSelectorBox
-
+        
+        LocaleSelectorModel {
+            id: localeSelectorModel
+        }
+        
         anchors.top: parent.top
         anchors.topMargin: 10
         anchors.left: parent.left
@@ -44,16 +36,24 @@ Dialog {
 
         width: 200
 
-        currentIndex: localeSelectorModel.getCurrentIndex()
+        currentIndex: formatDialogModel.getLocaleIndex()
 
         textRole: "text"
         valueRole: "value"
         model: localeSelectorModel
+        
+        onActivated: index => {
+            formatDialogModel.setLocaleIndex(index)
+        }
     }
 
     ComboBox {
         id: numberSignDisplaySelectorBox
 
+        NumberSignDisplaySelectorModel {
+            id: numberSignDisplaySelectorModel
+        }
+        
         anchors.top: localeSelectorBox.bottom
         anchors.topMargin: 10
         anchors.left: parent.left

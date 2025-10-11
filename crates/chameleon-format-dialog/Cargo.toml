@@ -1,0 +1,19 @@
+[package]
+name = "chameleon-format-dialog"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+cxx = { workspace = true }
+cxx-qt = { workspace = true }
+cxx-qt-lib = { workspace = true }
+cxx-qt-lib-additions = { workspace = true }
+chameleon_settings = { workspace = true }
+
+
+[build-dependencies]
+cxx-qt-build = { workspace = true }
+cxx-build = {workspace = true}
+chameleon_settings = {workspace = true}
+
+vcpkg = {workspace = true}

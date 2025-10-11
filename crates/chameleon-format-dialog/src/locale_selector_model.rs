@@ -74,6 +74,13 @@ impl LocaleSelectorModelRust {
         }
         None
     }
+
+    pub(crate) fn find_locale_name(&self, index: i32) -> Option<String> {
+        if index < 0 || index >= self.locals.len() as i32 {
+            return None;
+        }
+        Some(self.locals[index as usize].locale_name.clone())
+    }
 }
 
 
@@ -82,11 +89,9 @@ impl Default for LocaleSelectorModelRust {
         let mut ls = get_locale_information(OutputFor::AllLocales);
         ls.sort_by(|a, b| a.locale_display_name.cmp(&b.locale_display_name));
 
-        let mut format_dialog_model = LocaleSelectorModelRust {
+        LocaleSelectorModelRust {
             locals: ls,
-        };
-
-        format_dialog_model
+        }
     }
 }
 
