@@ -20,9 +20,6 @@ ApplicationWindow {
 
     FormatDialog {
         id: dialog
-
-        onAccepted: console.log("Ok clicked with value: ", currentValue)
-        onRejected: console.log("Cancel clicked")
     }
 
     Button {

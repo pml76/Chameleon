@@ -20,6 +20,7 @@ chrono-tz = { workspace = true }
 cxx-qt-lib-additions = { workspace = true }
 serde_json = {workspace = true}
 chameleon_settings = { workspace = true }
+chameleon-format-dialog = {workspace = true}
 
 
 [build-dependencies]

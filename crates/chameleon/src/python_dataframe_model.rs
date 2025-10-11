@@ -1,5 +1,5 @@
 ﻿use std::string::String;
-use crate::dialogs::format_dialog::format::{ format_f64 };
+use chameleon_format_dialog::format::{ format_f64 };
 use crate::python_dataframe_model::qobject::DataFrameModel;
 use chrono::NaiveDate;
 use chrono_tz::Tz;

@@ -9,12 +9,12 @@ use polars::prelude::*;
 use pyo3::types::{IntoPyDict, PyDict};
 use pyo3::ffi::c_str;
 use std::ffi::CStr;
-
-
-use cxx_qt_lib::{QGuiApplication, QQmlApplicationEngine, QString, QUrl};
+use std::pin::Pin;
+use cxx_qt::casting::Upcast;
+use cxx_qt_lib::{QGuiApplication, QQmlApplicationEngine, QQmlEngine, QString, QUrl};
 use chameleon_settings::{get_global_settings_python_base_directory, get_global_settings_qml_directory};
-use crate::dialogs::format_dialog::format::OutputFor;
-use crate::dialogs::format_dialog::locale::get_locale_information;
+use chameleon_format_dialog::format::OutputFor;
+use chameleon_format_dialog::locale::get_locale_information;
 
 const CODE: &CStr = c_str!(r#"
 import polars as pl
@@ -166,7 +166,7 @@ fn main() {
     // Load the QML path into the engine
     if let Some(engine) = engine.as_mut() {
         let qml_directory = get_global_settings_qml_directory();
-        engine.add_import_path(&QString::from(qml_directory.to_str().unwrap()));
+        //engine.add_import_path(&QString::from(qml_directory.to_str().unwrap()));
     }
     
     if let Some(engine) = engine.as_mut() {
@@ -177,9 +177,9 @@ fn main() {
     }
 
     if let Some(engine) = engine.as_mut() {
+        let engine: Pin<&mut QQmlEngine> = engine.upcast_pin();
         // Listen to a signal from the QML Engine
         engine
-            .as_qqmlengine()
             .on_quit(|_| {
                 println!("QML Quit!");
             })

@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "rust/cxx.h"
-#include "chameleon/cpp/includes/enums.h"
+#include "chameleon-format-dialog/cpp/includes/enums.h"
 
 struct LocaleInformation;
 

@@ -1,8 +1,9 @@
 ﻿use cxx_qt::CxxQtType;
 use cxx_qt_lib_additions::ItemDataRole;
 #[cxx_qt::bridge]
-mod qobject {
+pub mod qobject {
     #[repr(i32)]
+    #[derive(Debug)]
     enum ENumberSignDisplay {
         Auto = 0,
         Always = 1,
@@ -64,6 +65,12 @@ pub struct NumberSignDisplaySelectorModelRust {
     strings: Vec<String>,
 }
 
+impl NumberSignDisplaySelectorModelRust {
+    pub(crate) fn get_number_sign_displays(&self) -> &Vec<ENumberSignDisplay> {
+        &self.sign_conventions
+    }
+}
+
 impl Default for NumberSignDisplaySelectorModelRust {
     fn default() -> Self {
         Self {
@@ -82,7 +89,7 @@ impl qobject::NumberSignDisplaySelectorModel {
 
     fn role_names(self: &NumberSignDisplaySelectorModel) -> QHash_i32_QByteArray {
         let mut role_names = QHash_i32_QByteArray::default();
-        role_names.insert(ItemDataRole::DisplayRole.repr, "display".into());
+        role_names.insert(ItemDataRole::DisplayRole.repr, "text".into());
         role_names.insert(ItemDataRole::EditRole.repr, "value".into());
         role_names
     }

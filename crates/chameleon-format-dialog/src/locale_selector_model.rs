@@ -1,10 +1,10 @@
 ﻿use cxx_qt::CxxQtType;
 use cxx_qt_lib::QByteArray;
 use cxx_qt_lib_additions::ItemDataRole;
-use crate::dialogs::format_dialog::locale::{LocaleInformation, get_locale_information, OutputFor};
+use crate::locale::{LocaleInformation, get_locale_information, OutputFor};
 
 #[cxx_qt::bridge]
-mod qobject {
+pub mod qobject {
 
     unsafe extern "C++" {
         include!(<QAbstractTableModel>);
@@ -48,43 +48,44 @@ mod qobject {
         #[rust_name = "role_names"]
         fn roleNames(self: &LocaleSelectorModel) -> QHash_i32_QByteArray;
 
-        #[rust_name = "get_current_index"]
-        #[qinvokable]
-        fn getCurrentIndex(self: &LocaleSelectorModel) -> i32;
 
     }
 }
 
 pub struct LocaleSelectorModelRust {
     locals:  Vec<LocaleInformation>,
-    current_index : Option<i32>,
-
 }
 
-fn find_en_locale(ls: &Vec<LocaleInformation>) -> Option<i32> {
-     let mut index = 0;
-    
-    for l in ls.iter() {
-        if l.locale_name == "en" {
-            return Some(index)
-        }      
-        index += 1;
+impl LocaleSelectorModelRust {
+    pub(crate) fn default_locale_index(&self) -> Option<i32> {
+        for (index, locale) in self.locals.iter().enumerate() {
+            if locale.locale_name == "en" {
+                return Some(index as i32);
+            }
+        }
+        None
     }
-    
-    None
+
+    pub(crate) fn find_locale_index(&self, locale_name: &str) -> Option<i32> {
+        for (index, locale) in self.locals.iter().enumerate() {
+            if locale.locale_name == locale_name {
+                return Some(index as i32);
+            }
+        }
+        None
+    }
 }
+
 
 impl Default for LocaleSelectorModelRust {
     fn default() -> Self {
-        let ls = get_locale_information(OutputFor::AllLocales);
+        let mut ls = get_locale_information(OutputFor::AllLocales);
+        ls.sort_by(|a, b| a.locale_display_name.cmp(&b.locale_display_name));
+
         let mut format_dialog_model = LocaleSelectorModelRust {
             locals: ls,
-            current_index: None,
         };
 
-        let en_index = find_en_locale(&format_dialog_model.locals);
-
-        format_dialog_model.current_index = en_index;
         format_dialog_model
     }
 }
@@ -93,13 +94,6 @@ impl Default for LocaleSelectorModelRust {
 use qobject::*;
 
 impl qobject::LocaleSelectorModel {
-
-    fn get_current_index(self: &LocaleSelectorModel) -> i32 {
-        if let Some(index) = self.rust().current_index {
-            return index;
-        }
-        0
-    }
 
     fn column_count(self: &LocaleSelectorModel, _parent: &QModelIndex) -> i32 {
         1

@@ -1,5 +1,5 @@
 [workspace]
-members = ["xtask/*", "crates/*"]
+members = ["xtask", "crates/*"]
 resolver = "3"
 
 [workspace.dependencies]
@@ -19,6 +19,7 @@ cxx-build = { version = "1.0.186" }
 serde_json = { version = "1.0.145", features = ["indexmap"] }
 serde = {version = "1.0.228", features = ["derive"]}
 chameleon_settings = { path = "crates/chameleon_settings" }
+chameleon-format-dialog = {path = "crates/chameleon-format-dialog"}
 vcpkg = { version = "0.2.15" }
 
 
