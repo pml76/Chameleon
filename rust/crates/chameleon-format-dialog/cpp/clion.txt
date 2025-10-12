@@ -1,0 +1,2 @@
+to run clion add the vcpkg instance located in the target directory and make sure that icu is installed.
+

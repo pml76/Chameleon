@@ -8,6 +8,10 @@ authors = [
 ]
 license = "MIT OR Apache-2.0"
 
+[lib]
+crate-type = ["staticlib", "lib"]
+
+
 [dependencies]
 cxx = { workspace = true }
 cxx-qt = { workspace = true }
@@ -26,10 +30,10 @@ chameleon-format-dialog = {workspace = true}
 [build-dependencies]
 # The link_qt_object_files feature is required for statically linking Qt 6.
 cxx-qt-build = { workspace = true }
-cxx-build = {workspace = true}
 chameleon_settings = {workspace = true}
 serde_json = {workspace = true}
-vcpkg = {workspace = true}
+build-utils = { workspace = true}
+
 
 
 [package.metadata.vcpkg]

@@ -4,7 +4,8 @@ pub mod locale_selector_model;
 pub mod notion_selector_model;
 mod number_sign_display_selector_model;
 mod model;
-mod decimal_separator_display_selector_model;
+mod unit_selector_model;
+mod units;
 
 pub fn add(left: u64, right: u64) -> u64 {
     left + right

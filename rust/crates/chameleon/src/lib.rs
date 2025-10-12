@@ -1,4 +1,4 @@
-pub mod python_interface;
+﻿pub mod python_interface;
 pub mod python_dataframe_model;
 mod time_and_dates;
 mod dialogs;
@@ -61,11 +61,11 @@ fn pyo3_test_3() {
             let m = t.getattr("__module__")?.extract::<String>()?;
             if m.contains("polars") && t.name()? == "DataFrame" {
 
-               let res = PyDataFrame::extract_bound(&module.getattr(i.extract::<String>()?)?)?;
-               let res2 : DataFrame = res.into();
+                let res = PyDataFrame::extract_bound(&module.getattr(i.extract::<String>()?)?)?;
+                let res2 : DataFrame = res.into();
                 df = res2.clone();
-               println!("{:?}", res2);
-               // println!("{} : {}.{}", i.extract::<String>()?, m, t.name()?);
+                println!("{:?}", res2);
+                // println!("{} : {}.{}", i.extract::<String>()?, m, t.name()?);
             }
         }
         Ok(())
@@ -131,8 +131,8 @@ fn polars_main() {
     println!("{df}");
 
     // Assume `df` is an existing DataFrame:
-//    let column = df.column("column_name").unwrap();
-//    let column_by_index = df.select_at_idx(0).unwrap();
+    //    let column = df.column("column_name").unwrap();
+    //    let column_by_index = df.select_at_idx(0).unwrap();
 
     let value = &df.get(0).unwrap()[1];
     println!("{value}");
@@ -151,8 +151,10 @@ fn pymain() -> PyResult<()> {
         Ok(())
     })
 }
-fn main() {
 
+
+
+pub fn run_main() {
 
     pyo3_test_2();
     pyo3_test_3();
@@ -168,12 +170,9 @@ fn main() {
         let qml_directory = get_global_settings_qml_directory();
         //engine.add_import_path(&QString::from(qml_directory.to_str().unwrap()));
     }
-    
+
     if let Some(engine) = engine.as_mut() {
-        let main_qml_file = get_global_settings_qml_directory().join("main.qml");
-        let url = QUrl::from_local_file(&QString::from(main_qml_file.to_str().unwrap()));
-        engine.load(&url);
-        println!("qml_directory: {:?}", main_qml_file);
+        engine.load(&QUrl::from("qrc:/qt/qml/chameleon/main/qml/main.qml"));
     }
 
     if let Some(engine) = engine.as_mut() {

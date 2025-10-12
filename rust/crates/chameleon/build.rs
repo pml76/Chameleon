@@ -1,47 +1,10 @@
 use cxx_qt_build::{CxxQtBuilder, QmlModule};
-use std::fs;
-use std::io;
-use std::path::{Path, PathBuf};
+
+use std::path::PathBuf;
 use chameleon_settings::*;
+use build_utils::copy_dir_recursive;
 
-pub fn copy_dir_recursive<S: AsRef<Path>, D: AsRef<Path>>(src: S, dst: D) -> io::Result<()> {
-    fn copy_dir(src: &Path, dst: &Path) -> io::Result<()> {
-        if !src.is_dir() {
-            return Err(io::Error::new(
-                io::ErrorKind::InvalidInput,
-                format!("Source '{}' is not a directory", src.display()),
-            ));
-        }
-        fs::create_dir_all(dst)?;
 
-        for entry in fs::read_dir(src)? {
-            let entry = entry?;
-            let file_type = entry.file_type()?;
-            let src_path = entry.path();
-            let dst_path = dst.join(entry.file_name());
-
-            if file_type.is_dir() {
-                copy_dir(&src_path, &dst_path)?;
-            } else if file_type.is_file() {
-                // Overwrites if it exists
-                fs::create_dir_all(dst_path.parent().unwrap())?;
-                fs::copy(&src_path, &dst_path)?;
-            } else if file_type.is_symlink() {
-                // Follow the symlink: copy target contents.
-                // If the link points to a directory, recurse; otherwise copy the file.
-                let meta = fs::metadata(&src_path)?;
-                if meta.is_dir() {
-                    copy_dir(&src_path, &dst_path)?;
-                } else {
-                    fs::copy(&src_path, &dst_path)?;
-                }
-            }
-        }
-        Ok(())
-    }
-
-    copy_dir(src.as_ref(), dst.as_ref())
-}
 
 fn main() {
 
@@ -59,7 +22,7 @@ fn main() {
         .qt_module("Network")
         .qml_module(QmlModule::<&str,&str> {
             uri: "chameleon.main",
-            qml_files: &["../../qml/main.qml"],
+            qml_files: &["qml/main.qml"],
             ..Default::default()
         })
         .files(["src/python_dataframe_model.rs"])
@@ -70,29 +33,31 @@ fn main() {
     let mut python_dir = PathBuf::from(cargo_manifest_dir.clone());
     python_dir.pop();
     python_dir.pop();
+    python_dir.pop();
     python_dir = python_dir.join(".venv");
 
     if !python_dir.exists() {
-        panic!("Python virtual environment not found. Please create it first by running `python -m venv .venv` in the project root directory.");
+        panic!(
+            "Python virtual environment not found in {}. Please create it first by running `python -m venv .venv` in the project root directory.", python_dir.display());
     }
 
     copy_dir_recursive(
         format!("{}/qt-build-utils/qml_modules", out_dir),
         format!("{}/../../../qml_modules", out_dir),
     )
-    .unwrap(); 
-
+    .expect("Failed to copy qml modules");
 
     copy_dir_recursive(
         format!("{}/cxxqtbuild/", out_dir),
         format!("{}/../../../cxxqtbuild", out_dir),
     )
-    .unwrap();
+    .expect("Failed to copy cxxqtbuild");
+
 
     let mut qml_dir = PathBuf::from(cargo_manifest_dir.clone());
     qml_dir.pop();
     qml_dir.pop();
-    qml_dir.push("qml");
+    qml_dir.push("../../../qml");
 
     let settings = GlobalSettings {
         qml_directory: qml_dir,

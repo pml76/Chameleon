@@ -54,9 +54,6 @@ pub mod qobject {
         #[rust_name = "role_names"]
         fn roleNames(self: &NumberSignDisplaySelectorModel) -> QHash_i32_QByteArray;
 
-        #[rust_name = "get_current_index"]
-        #[qinvokable]
-        fn getCurrentIndex(self: &NumberSignDisplaySelectorModel) -> i32;
     }
 }
 
@@ -83,9 +80,6 @@ impl Default for NumberSignDisplaySelectorModelRust {
 use qobject::*;
 
 impl qobject::NumberSignDisplaySelectorModel {
-    fn get_current_index(self: &NumberSignDisplaySelectorModel) -> i32 {
-        0
-    }
 
     fn role_names(self: &NumberSignDisplaySelectorModel) -> QHash_i32_QByteArray {
         let mut role_names = QHash_i32_QByteArray::default();

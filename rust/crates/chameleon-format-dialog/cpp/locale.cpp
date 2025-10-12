@@ -7,8 +7,8 @@ rust::Vec<LocaleInformation> get_locale_information(OutputFor output_for) {
     rust::Vec<LocaleInformation> locale_info;
 
     int32_t count;
-    const icu::Locale* list = NULL;
-    icu::UnicodeString result;
+    const Locale* list = NULL;
+    UnicodeString result;
 
     switch (output_for) {
         case OutputFor::AllLocales: list = icu::Locale::getAvailableLocales(count); break;

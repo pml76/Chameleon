@@ -62,7 +62,7 @@ pub fn find_settings_file() -> Option<PathBuf> {
         return home;
     }
 
-    let mut path = canonicalize(PathBuf::from(".")).unwrap();
+    let mut path = canonicalize(PathBuf::from("./")).unwrap();
     path.push(SETTINGS_FILE_NAME);
     check_settings_path_exists(&path)
 }

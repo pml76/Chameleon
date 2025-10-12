@@ -1,8 +1,9 @@
 ﻿use std::path::PathBuf;
 use cxx_qt_build::{CxxQtBuilder, QmlModule};
+use build_utils::copy_dir_recursive;
 
 fn main() {
-
+    let out_dir = std::env::var("OUT_DIR").unwrap();
     let cargo_manifest_dir = PathBuf::from(std::env::var("CARGO_MANIFEST_DIR").unwrap().as_str());
 
     let lib_icu = vcpkg::Config::new().emit_includes(true).find_package("icu");
@@ -47,13 +48,27 @@ fn main() {
                ])
         .cc_builder(|cc| {
             cc.includes(paths.clone());
-            cc.include(cargo_manifest_dir.clone().join(".."));
+            cc.include(cargo_manifest_dir.clone().join("../../../.."));
             cc.flag("/utf-8");
             cc.flag("/std:c++17");
-            cc.files(["cpp/format.cpp", "cpp/locale.cpp"]);
+            cc.files(["cpp/format.cpp", "cpp/locale.cpp", "cpp/units.cpp"]);
 
         })
         .build();
+
+
+    copy_dir_recursive(
+        format!("{}/qt-build-utils/qml_modules", out_dir),
+        format!("{}/../../../qml_modules", out_dir),
+    )
+        .expect("Failed to copy qml modules");
+
+    copy_dir_recursive(
+        format!("{}/cxxqtbuild/", out_dir),
+        format!("{}/../../../cxxqtbuild", out_dir),
+    )
+        .expect("Failed to copy cxxqtbuild");
+
 
 
 }

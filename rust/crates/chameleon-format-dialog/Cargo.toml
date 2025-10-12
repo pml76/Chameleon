@@ -15,5 +15,6 @@ chameleon_settings = { workspace = true }
 cxx-qt-build = { workspace = true }
 cxx-build = {workspace = true}
 chameleon_settings = {workspace = true}
+build-utils = { workspace = true}
 
 vcpkg = {workspace = true}
