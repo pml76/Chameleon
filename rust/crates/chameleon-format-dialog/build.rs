@@ -44,7 +44,9 @@ fn main() {
                 "src/locale.rs",
                 "src/number_sign_display_selector_model.rs",
                 "src/notion_selector_model.rs",
-                "src/model.rs"
+                "src/model.rs",
+                "src/unit_selector_model.rs",
+                "src/units.rs",
                ])
         .cc_builder(|cc| {
             cc.includes(paths.clone());

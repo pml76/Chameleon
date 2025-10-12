@@ -1,6 +1,6 @@
 use cxx_qt::CxxQtType;
 use cxx_qt_lib_additions::ItemDataRole;
-use crate::notion_selector_model::qobject::ENotion;
+pub(crate) use crate::notion_selector_model::qobject::ENotion;
 
 /**
   * Holds the Model for the notion of a number format.

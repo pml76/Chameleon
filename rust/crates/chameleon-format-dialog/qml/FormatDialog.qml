@@ -96,4 +96,56 @@ Dialog {
             formatDialogModel.setNotionIndex(index)
         }
     }
+
+
+    ComboBox {
+        id: unitTypeSelector
+
+        UnitTypeSelectorModel {
+            id: unitTypeSelectorModel
+        }
+
+        anchors.top: notionSelectorBox.bottom
+        anchors.topMargin: 10
+        anchors.left: parent.left
+        anchors.leftMargin: 10
+
+        width: 200
+
+        //currentIndex: formatDialogModel.getNotionIndex()
+
+        textRole: "text"
+        valueRole: "value"
+        model: unitTypeSelectorModel
+
+        onActivated: index => {
+            unitSelectorModel.setUnitType(currentText)
+          //  formatDialogModel.setNotionIndex(index)
+        }
+    }
+
+    ComboBox {
+        id: unitSelector
+
+        UnitSelectorModel {
+            id: unitSelectorModel
+        }
+
+        anchors.top: unitTypeSelector.bottom
+        anchors.topMargin: 10
+        anchors.left: parent.left
+        anchors.leftMargin: 10
+
+        width: 200
+
+        //currentIndex: formatDialogModel.getNotionIndex()
+
+        textRole: "text"
+        valueRole: "value"
+        model: unitSelectorModel
+
+        onActivated: index => {
+            //  formatDialogModel.setNotionIndex(index)
+        }
+    }
 }

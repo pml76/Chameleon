@@ -5,20 +5,25 @@ use crate::number_sign_display_selector_model::qobject::ENumberSignDisplay;
 use crate::locale_selector_model::LocaleSelectorModelRust;
 use cxx_qt::CxxQtType;
 use std::pin::Pin;
+use crate::unit_selector_model::UnitTypeSelectorModelRust;
 
 #[cxx_qt::bridge]
 mod qobject {
-    /*    unsafe extern "C++" {
-            include!("chameleon-format-dialog/src/locale_selector_model.cxxqt.h");
-            type LocaleSelectorModel = crate::locale_selector_model::qobject::LocaleSelectorModel;
-        }
 
-        extern "RustQt" {
-            #[qobject]
-            #[qml_element]
-            type FormatDialogModel = super::FormatDialogModelRust;
-        }
-    */
+    unsafe extern "C++" {
+        include!("chameleon-format-dialog/src/notion_selector_model.cxxqt.h");
+        type ENotion = crate::notion_selector_model::ENotion;
+
+        include!("chameleon-format-dialog/src/number_sign_display_selector_model.cxxqt.h");
+        type ENumberSignDisplay = crate::number_sign_display_selector_model::ENumberSignDisplay;
+    }
+
+    pub struct FormatDialogSettings {
+        pub notion: ENotion,
+        pub number_sign_display: ENumberSignDisplay,
+        pub locale: String,
+        pub unit_type: String,
+    }
 
     extern "RustQt" {
         #[qobject]
@@ -60,6 +65,9 @@ pub struct FormatDialogModelRust {
 
     locale: String,
     locale_selector_model_rust: LocaleSelectorModelRust,
+
+    unit_type: String,
+    unit_type_selector_model_rust: UnitTypeSelectorModelRust,
 }
 
 impl Default for FormatDialogModelRust {
@@ -73,9 +81,13 @@ impl Default for FormatDialogModelRust {
 
             locale: "".to_string(),
             locale_selector_model_rust: LocaleSelectorModelRust::default(),
+
+            unit_type: "".to_string(),
+            unit_type_selector_model_rust: UnitTypeSelectorModelRust::default(),
         };
 
         ret.locale = ret.locale_selector_model_rust.find_locale_name(ret.locale_selector_model_rust.default_locale_index().unwrap()).unwrap();
+        ret.unit_type = ret.unit_type_selector_model_rust.default_unit_type();
         ret
     }
 }

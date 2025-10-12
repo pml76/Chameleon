@@ -55,6 +55,7 @@ pub mod qobject {
         fn roleNames(self: &NumberSignDisplaySelectorModel) -> QHash_i32_QByteArray;
 
     }
+
 }
 
 pub struct NumberSignDisplaySelectorModelRust {
@@ -77,7 +78,7 @@ impl Default for NumberSignDisplaySelectorModelRust {
     }
 }
 
-use qobject::*;
+pub use qobject::*;
 
 impl qobject::NumberSignDisplaySelectorModel {
 
