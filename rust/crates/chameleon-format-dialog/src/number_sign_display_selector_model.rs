@@ -13,6 +13,7 @@ pub mod qobject {
         ExceptZero = 5,
         SignNegative = 6,
         AccountingNegative = 7,
+        AccountingExceptZero = 8,
     }
     unsafe extern "C++" {
 

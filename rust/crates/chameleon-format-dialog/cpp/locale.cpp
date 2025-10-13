@@ -8,7 +8,6 @@ rust::Vec<LocaleInformation> get_locale_information(OutputFor output_for) {
 
     int32_t count;
     const Locale* list = NULL;
-    UnicodeString result;
 
     switch (output_for) {
         case OutputFor::AllLocales: list = icu::Locale::getAvailableLocales(count); break;
@@ -17,18 +16,35 @@ rust::Vec<LocaleInformation> get_locale_information(OutputFor output_for) {
         default: return locale_info;
     }
 
-    std::string tmp;
     LocaleInformation locale_info_item;
     for (int i = 0; i < count; i++) {
         locale_info_item.locale = &list[i];
         locale_info_item.locale_name = list[i].getName();
 
-        result = ""; tmp = "";
-        list[i].getDisplayName(icu::Locale::getUS(), result);
+        UnicodeString result = ""; std::string tmp;
+        list[i].getDisplayName(Locale::getRoot(), result);
         locale_info_item.locale_display_name = result.toUTF8String(tmp);
 
         locale_info.push_back(locale_info_item);
     }
 
     return locale_info;
+}
+
+
+const Locale *get_default_locale() {
+    return &Locale::getRoot();
+}
+
+rust::String get_locale_name(const Locale *locale)
+{
+    return locale->getName();
+}
+
+rust::String get_locale_display_name(const Locale *locale)
+{
+    UnicodeString result = "";
+    std::string tmp;
+    locale->getDisplayName(Locale::getRoot(), result);
+    return result.toUTF8String(tmp);
 }

@@ -5,6 +5,7 @@ use crate::number_sign_display_selector_model::qobject::ENumberSignDisplay;
 use crate::locale_selector_model::LocaleSelectorModelRust;
 use cxx_qt::CxxQtType;
 use std::pin::Pin;
+use crate::locale::LocaleInformation;
 use crate::unit_selector_model::UnitTypeSelectorModelRust;
 
 #[cxx_qt::bridge]
@@ -16,12 +17,16 @@ mod qobject {
 
         include!("chameleon-format-dialog/src/number_sign_display_selector_model.cxxqt.h");
         type ENumberSignDisplay = crate::number_sign_display_selector_model::ENumberSignDisplay;
+
+
+        include!("chameleon-format-dialog/src/locale.cxxqt.h");
+        type LocaleInformation = crate::locale_selector_model::LocaleInformation;
     }
 
     pub struct FormatDialogSettings {
         pub notion: ENotion,
         pub number_sign_display: ENumberSignDisplay,
-        pub locale: String,
+        pub locale: LocaleInformation,
         pub unit_type: String,
     }
 
@@ -63,7 +68,7 @@ pub struct FormatDialogModelRust {
     number_sign_display: ENumberSignDisplay,
     number_sign_display_selector_model_rust: NumberSignDisplaySelectorModelRust,
 
-    locale: String,
+    locale: LocaleInformation,
     locale_selector_model_rust: LocaleSelectorModelRust,
 
     unit_type: String,
@@ -79,14 +84,14 @@ impl Default for FormatDialogModelRust {
             number_sign_display: ENumberSignDisplay::Auto,
             number_sign_display_selector_model_rust: NumberSignDisplaySelectorModelRust::default(),
 
-            locale: "".to_string(),
+            locale: LocaleInformation::default(),
             locale_selector_model_rust: LocaleSelectorModelRust::default(),
 
             unit_type: "".to_string(),
             unit_type_selector_model_rust: UnitTypeSelectorModelRust::default(),
         };
 
-        ret.locale = ret.locale_selector_model_rust.find_locale_name(ret.locale_selector_model_rust.default_locale_index().unwrap()).unwrap();
+        ret.locale = ret.locale_selector_model_rust.find_locale_information(ret.locale_selector_model_rust.default_locale_index().unwrap()).unwrap().clone();
         ret.unit_type = ret.unit_type_selector_model_rust.default_unit_type();
         ret
     }
@@ -95,16 +100,16 @@ impl Default for FormatDialogModelRust {
 impl qobject::FormatDialogModel {
     fn get_locale_index(self: Pin<&mut Self>) -> i32 {
         println!("get locale index");
-        if let Some(s) = self.rust().locale_selector_model_rust.find_locale_index(&self.rust().locale) {
+        if let Some(s) = self.rust().locale_selector_model_rust.find_locale_index(&self.rust().locale.locale_name) {
             return s;
         }
         0
     }
 
     fn set_locale_index(mut self: Pin<&mut Self>, index: i32) {
-        if let Some(s) = self.rust().locale_selector_model_rust.find_locale_name(index) {
-            println!("set locale to: {:?}", s);
-            self.as_mut().rust_mut().locale = s;
+        if let Some(s) = self.rust().locale_selector_model_rust.find_locale_information(index) {
+            println!("set locale to: {:?}", s.locale_display_name);
+            self.as_mut().rust_mut().locale = s.clone();
         }
     }
 

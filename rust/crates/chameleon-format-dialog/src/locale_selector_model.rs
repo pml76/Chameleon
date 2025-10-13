@@ -1,7 +1,7 @@
 ﻿use cxx_qt::CxxQtType;
 use cxx_qt_lib::QByteArray;
 use cxx_qt_lib_additions::ItemDataRole;
-use crate::locale::{LocaleInformation, get_locale_information, OutputFor};
+pub(crate) use crate::locale::{LocaleInformation, get_locale_information};
 
 #[cxx_qt::bridge]
 pub mod qobject {
@@ -75,11 +75,11 @@ impl LocaleSelectorModelRust {
         None
     }
 
-    pub(crate) fn find_locale_name(&self, index: i32) -> Option<String> {
+    pub(crate) fn find_locale_information(&self, index: i32) -> Option<&LocaleInformation> {
         if index < 0 || index >= self.locals.len() as i32 {
             return None;
         }
-        Some(self.locals[index as usize].locale_name.clone())
+        Some(&self.locals[index as usize])
     }
 }
 
@@ -97,6 +97,7 @@ impl Default for LocaleSelectorModelRust {
 
 
 use qobject::*;
+use crate::format::OutputFor;
 
 impl qobject::LocaleSelectorModel {
 
