@@ -26,7 +26,7 @@ mod qobject {
     pub struct FormatDialogSettings {
         pub notion: ENotion,
         pub number_sign_display: ENumberSignDisplay,
-        pub locale: LocaleInformation,
+        pub locale: String,
         pub unit_type: String,
     }
 
@@ -68,7 +68,7 @@ pub struct FormatDialogModelRust {
     number_sign_display: ENumberSignDisplay,
     number_sign_display_selector_model_rust: NumberSignDisplaySelectorModelRust,
 
-    locale: LocaleInformation,
+    locale: String,
     locale_selector_model_rust: LocaleSelectorModelRust,
 
     unit_type: String,
@@ -84,7 +84,7 @@ impl Default for FormatDialogModelRust {
             number_sign_display: ENumberSignDisplay::Auto,
             number_sign_display_selector_model_rust: NumberSignDisplaySelectorModelRust::default(),
 
-            locale: LocaleInformation::default(),
+            locale: "".to_string(),
             locale_selector_model_rust: LocaleSelectorModelRust::default(),
 
             unit_type: "".to_string(),
@@ -100,7 +100,7 @@ impl Default for FormatDialogModelRust {
 impl qobject::FormatDialogModel {
     fn get_locale_index(self: Pin<&mut Self>) -> i32 {
         println!("get locale index");
-        if let Some(s) = self.rust().locale_selector_model_rust.find_locale_index(&self.rust().locale.locale_name) {
+        if let Some(s) = self.rust().locale_selector_model_rust.find_locale_index(self.rust().locale.as_str()) {
             return s;
         }
         0
@@ -108,7 +108,7 @@ impl qobject::FormatDialogModel {
 
     fn set_locale_index(mut self: Pin<&mut Self>, index: i32) {
         if let Some(s) = self.rust().locale_selector_model_rust.find_locale_information(index) {
-            println!("set locale to: {:?}", s.locale_display_name);
+            println!("set locale to: {:?}", s);
             self.as_mut().rust_mut().locale = s.clone();
         }
     }

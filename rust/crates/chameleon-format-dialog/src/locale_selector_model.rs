@@ -75,11 +75,11 @@ impl LocaleSelectorModelRust {
         None
     }
 
-    pub(crate) fn find_locale_information(&self, index: i32) -> Option<&LocaleInformation> {
+    pub(crate) fn find_locale_information(&self, index: i32) -> Option<String> {
         if index < 0 || index >= self.locals.len() as i32 {
             return None;
         }
-        Some(&self.locals[index as usize])
+        Some(self.locals[index as usize].locale_name.clone())
     }
 }
 

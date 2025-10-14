@@ -1,13 +1,15 @@
 ﻿#include "format.h"
+
+#include <iostream>
 #include <unicode/numberformatter.h>
 #include "chameleon-format-dialog/src/locale.cxx.h"
 #include "chameleon-format-dialog/src/model.cxxqt.h"
 #include "chameleon-format-dialog/src/number_sign_display_selector_model.cxxqt.h"
 
 
-number::LocalizedNumberFormatter new_number_formater_with_locale(const LocaleInformation &locale)
+number::LocalizedNumberFormatter new_number_formater_with_locale(const std::string &locale_name)
 {
-    return number::NumberFormatter::withLocale(*locale.locale);
+    return number::NumberFormatter::withLocale(Locale::createCanonical(locale_name.c_str()));
 }
 
 number::ScientificNotation scientific_notation(const bool is_engineering, const ENumberSignDisplay number_sign_display, const int32_t min_exponent_digits) {
@@ -70,10 +72,21 @@ number::LocalizedNumberFormatter notation (const number::LocalizedNumberFormatte
 
 }
 
+number::LocalizedNumberFormatter unit(const number::LocalizedNumberFormatter& f, const std::string &unit_name)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    const MeasureUnit u = MeasureUnit::forIdentifier(StringPiece(unit_name.c_str()), status);
+    if (U_FAILURE(status)) {
+        std::cerr << "Error-code returned from MeasureUnit::forIdentifier(): " << status << std::endl;
+    }
 
-rust::String format_f64(const LocaleInformation &locale, const double &d) {
-    auto l = number::NumberFormatter::with();
-    l.notation(number::Notation::compactShort());
+    return f.unit(u);
+}
+
+
+rust::String format_f64(const rust::Str locale_name) {
+    auto l = new_number_formater_with_locale(std::string(locale_name))
+        .notation(number::Notation::compactShort());
 
     return {""};
 }

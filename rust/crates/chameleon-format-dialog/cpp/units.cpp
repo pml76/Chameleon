@@ -10,7 +10,6 @@ rust::Vec<rust::String> get_unit_types() {
     rust::Vec<rust::String> unit_types;
 
     UErrorCode errorCode = U_ZERO_ERROR;
-    std::string result;
     StringEnumeration* types = MeasureUnit::getAvailableTypes(errorCode);
 
     if (U_SUCCESS(errorCode))
@@ -18,7 +17,7 @@ rust::Vec<rust::String> get_unit_types() {
         errorCode = U_ZERO_ERROR;
         for (int32_t i = 0; i < types->count(errorCode); i++) {
             errorCode = U_ZERO_ERROR;
-            result = "";
+            std::string result;
             std::string tmp = types->snext(errorCode)->toUTF8String(result);
             unit_types.push_back(tmp);
         }
