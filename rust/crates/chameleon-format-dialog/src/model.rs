@@ -5,11 +5,10 @@ use crate::number_sign_display_selector_model::qobject::ENumberSignDisplay;
 use crate::locale_selector_model::LocaleSelectorModelRust;
 use cxx_qt::CxxQtType;
 use std::pin::Pin;
-use crate::locale::LocaleInformation;
 use crate::unit_selector_model::UnitTypeSelectorModelRust;
 
 #[cxx_qt::bridge]
-mod qobject {
+mod qobject2 {
 
     unsafe extern "C++" {
         include!("chameleon-format-dialog/src/notion_selector_model.cxxqt.h");
@@ -21,18 +20,20 @@ mod qobject {
 
         include!("chameleon-format-dialog/src/locale.cxxqt.h");
         type LocaleInformation = crate::locale_selector_model::LocaleInformation;
-    }
 
-    pub struct FormatDialogSettings {
-        pub notion: ENotion,
-        pub number_sign_display: ENumberSignDisplay,
-        pub locale: String,
-        pub unit_type: String,
     }
 
     extern "RustQt" {
         #[qobject]
         #[qml_element]
+        #[base = QObject]
+        type DataFormatter = super::DataFormatterRust;
+    }
+
+    extern "RustQt" {
+        #[qobject]
+        #[qml_element]
+        #[qproperty(*const DataFormatter, data_formatter)]
         type FormatDialogModel = super::FormatDialogModelRust;
 
         #[rust_name = "set_notion_index"]
@@ -61,7 +62,21 @@ mod qobject {
     }
 }
 
+pub struct DataFormatterRust {
+}
+
+impl Default for DataFormatterRust {
+    fn default() -> Self {
+        Self {
+        }
+    }
+}
+
+use qobject2::*;
+
 pub struct FormatDialogModelRust {
+    data_formatter: *const DataFormatter,
+
     notion: ENotion,
     notion_selector_model_rust: NotionSelectorModelRust,
 
@@ -78,6 +93,8 @@ pub struct FormatDialogModelRust {
 impl Default for FormatDialogModelRust {
     fn default() -> Self {
         let mut ret = Self {
+            data_formatter: std::ptr::null(),
+
             notion: ENotion::Simple,
             notion_selector_model_rust: NotionSelectorModelRust::default(),
 
@@ -97,7 +114,7 @@ impl Default for FormatDialogModelRust {
     }
 }
 
-impl qobject::FormatDialogModel {
+impl qobject2::FormatDialogModel {
     fn get_locale_index(self: Pin<&mut Self>) -> i32 {
         println!("get locale index");
         if let Some(s) = self.rust().locale_selector_model_rust.find_locale_index(self.rust().locale.as_str()) {
