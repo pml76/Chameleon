@@ -4,7 +4,7 @@ import QtQuick.Window
 
 // This must match the uri and version
 // specified in the qml_module in the build.rs script.
-import chameleon.main 1.0
+import chameleon.main
 import chameleon.dialogs.format
 
 ApplicationWindow {
@@ -20,6 +20,12 @@ ApplicationWindow {
 
     FormatDialog {
         id: dialog
+
+        selectedLocale: formatDialogModel.defaultLocale()
+        numberSignDisplay: formatDialogModel.defaultNumberSignDisplay()
+        notation: formatDialogModel.defaultNotation()
+        unitType: formatDialogModel.defaultUnitType()
+        unit: formatDialogModel.defaultUnit()
     }
 
     Button {

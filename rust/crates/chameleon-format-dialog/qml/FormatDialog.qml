@@ -5,6 +5,14 @@ import chameleon.dialogs.format
 
 Dialog {
 
+    required property string selectedLocale
+    required property string numberSignDisplay
+    required property string notation
+    required property string unitType
+    required property string unit
+
+    property FormatDialogModel formatDialogModel
+
     x: 100
     y: 100
     width: 800
@@ -23,7 +31,7 @@ Dialog {
     
 
     ComboBox {
-        id: localeSelectorBox
+        id: localeSelector
         
         LocaleSelectorModel {
             id: localeSelectorModel
@@ -41,14 +49,11 @@ Dialog {
         textRole: "text"
         valueRole: "value"
         model: localeSelectorModel
-        
-        onActivated: index => {
-            formatDialogModel.setLocaleIndex(index)
-        }
+
     }
 
     ComboBox {
-        id: numberSignDisplaySelectorBox
+        id: numberSignDisplaySelector
 
         NumberSignDisplaySelectorModel {
             id: numberSignDisplaySelectorModel
@@ -73,10 +78,10 @@ Dialog {
     }
 
     ComboBox {
-        id: notionSelectorBox
+        id: notationSelector
 
         NotionSelectorModel {
-            id: notionSelectorModel
+            id: notationSelectorModel
         }
 
         anchors.top: numberSignDisplaySelectorBox.bottom
