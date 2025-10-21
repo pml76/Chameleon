@@ -1,9 +1,7 @@
-﻿use std::string::String;
-use chameleon_format_dialog::format::{ format_f64 };
-use crate::python_dataframe_model::qobject::DataFrameModel;
+﻿use crate::python_dataframe_model::qobject::DataFrameModel;
 use chrono::NaiveDate;
 use chrono_tz::Tz;
-use cxx_qt::{Constructor, CxxQtType};
+use cxx_qt::{CxxQtType};
 use cxx_qt_lib::{QModelIndex, QString, QTime, QVariant};
 use polars::datatypes::AnyValue::*;
 use polars::df;
@@ -69,42 +67,12 @@ mod qobject {
 use qobject::*;
 
 struct Attache {
-    name: QString,
-    bool_format: String,
-    string_format: String,
-    u8_format: String,
-    u16_format: String,
-    u32_format: String,
-    u64_format: String,
-    i8_format: String,
-    i16_format: String,
-    i32_format: String,
-    i64_format: String,
-    f32_format: String,
-    f64_format: String,
-    date_format: String,
-    datetime_format: String,
-    time_format: String,
+
 }
 
 impl Attache {
-    fn new(name: QString) -> Self {
-        Self { name,
-            bool_format: String::from("{}"),
-            string_format: String::from("{}"),
-            u8_format: String::from("{}"),
-            u16_format: String::from("{}"),
-            u32_format: String::from("{}"),
-            u64_format: String::from("{}"),
-            i8_format: String::from("{}"),
-            i16_format: String::from("{}"),
-            i32_format: String::from("{}"),
-            i64_format: String::from("{}"),
-            f32_format: String::from("{}"),
-            f64_format: String::from("{}"),
-            date_format: String::from("%Y-%m-%d"),
-            datetime_format: String::from("%Y-%m-%d %H:%M:%S"),
-            time_format: String::from("%H:%M:%S"),
+    fn new(_name: QString) -> Self {
+        Self {
         }
     }
 
@@ -127,7 +95,7 @@ impl Attache {
         };
 
         let local_date_time = utc_date_time.and_local_timezone(time_zone).unwrap();
-        let date_time_string = local_date_time.format(&self.datetime_format).to_string();
+        let date_time_string = local_date_time.format("YYYY-MM-DD").to_string();
         QVariant::from(&QString::from(date_time_string))
     }
     fn prepare_data(&self, value: &AnyValue) -> QVariant {
@@ -148,14 +116,14 @@ impl Attache {
             Int64(i) => QVariant::from(&QString::from(format_i64(&self.i64_format, i))),
             Float32(f) => QVariant::from(&QString::from(format_f32(&self.f32_format, f))),
             */
-            Float64(f) => QVariant::default(), // QVariant::from(&QString::from(format_f64(&self.f64_format, f))),
+            Float64(_f) => QVariant::default(), // QVariant::from(&QString::from(format_f64(&self.f64_format, f))),
 
             Date(d) => {
                 let o_date = NaiveDate::from_epoch_days(*d);
                 let naive_date = if let Some(d) = o_date { d } else {
                     NaiveDate::from_epoch_days(0).unwrap()
                 };
-                let date = naive_date.format(&self.date_format)
+                let date = naive_date.format("YYYY-MM-DD")
                     .to_string();
 
                 println!("{}", naive_date);
@@ -190,7 +158,7 @@ impl Attache {
 
 pub struct DataFrameModelRust {
     df: DataFrame,
-    attaches: Vec<Attache>,
+    //attaches: Vec<Attache>,
 }
 
 impl Default for DataFrameModelRust {
@@ -208,7 +176,7 @@ impl Default for DataFrameModelRust {
                 "height" => [1.56, 1.77, 1.65, 1.75],  // (m)
             )
             .unwrap(),
-            attaches: vec![],
+            //attaches: vec![],
         }
     }
 }

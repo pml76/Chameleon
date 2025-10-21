@@ -399,6 +399,7 @@ name = "chameleon_bin"
 version = "0.1.0"
 dependencies = [
  "chameleon",
+ "chameleon-format-dialog",
 ]
 
 [[package]]

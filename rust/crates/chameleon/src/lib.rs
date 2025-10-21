@@ -11,10 +11,9 @@ use pyo3::ffi::c_str;
 use std::ffi::CStr;
 use std::pin::Pin;
 use cxx_qt::casting::Upcast;
-use cxx_qt_lib::{QGuiApplication, QQmlApplicationEngine, QQmlEngine, QString, QUrl};
-use chameleon_settings::{get_global_settings_python_base_directory, get_global_settings_qml_directory};
-use chameleon_format_dialog::format::OutputFor;
-use chameleon_format_dialog::locale::get_locale_information;
+use cxx_qt_lib::{QGuiApplication, QQmlApplicationEngine, QQmlEngine, QUrl};
+use chameleon_settings::{get_global_settings_python_base_directory};
+
 
 const CODE: &CStr = c_str!(r#"
 import polars as pl
@@ -164,12 +163,6 @@ pub fn run_main() {
     // Create the application and engine
     let mut app = QGuiApplication::new();
     let mut engine = QQmlApplicationEngine::new();
-
-    // Load the QML path into the engine
-    if let Some(engine) = engine.as_mut() {
-        let qml_directory = get_global_settings_qml_directory();
-        //engine.add_import_path(&QString::from(qml_directory.to_str().unwrap()));
-    }
 
     if let Some(engine) = engine.as_mut() {
         engine.load(&QUrl::from("qrc:/qt/qml/chameleon/main/qml/main.qml"));
