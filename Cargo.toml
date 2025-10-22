@@ -12,6 +12,7 @@ pyo3-polars = "0.24.0"
 chrono = { version = "0.4.42" }
 chrono-tz = { version = "0.10.4", features = ["case-insensitive"]}
 cxx-qt-lib-additions = { path = "rust/crates/cxx-qt-lib-additions" }
+icu = {version = "2.0.0", features = ["experimental", "datagen", "compiled_data"]}
 
 # The link_qt_object_files feature is required for statically linking Qt 6.
 cxx-qt-build = { path = "../cxx-qt/crates/cxx-qt-build", features = [ "link_qt_object_files" ] }
