@@ -1,5 +1,5 @@
 ﻿#[cxx::bridge]
-mod ffi {
+mod qobject {
 
     #[repr(i32)]
     enum OutputKind {
@@ -28,6 +28,13 @@ mod ffi {
     unsafe extern "C++" {
         include!("chameleon-format-dialog/cpp/format.h");
 
+        type LocalizedNumberFormatter;
+
+        fn format_f64(self: &LocalizedNumberFormatter, value: f64) ->Result<String>;
+        fn format_i64(self: &LocalizedNumberFormatter, value: i64) -> Result<String>;
+
+        fn new_localized_number_formatter(locale_name: &str) -> UniquePtr<LocalizedNumberFormatter>;
+
         unsafe fn format_f64(locale_name: &str) -> String;
         
 
@@ -35,4 +42,11 @@ mod ffi {
 
 }
 
-pub use ffi::*;
+use cxx::UniquePtr;
+pub use qobject::*;
+
+impl LocalizedNumberFormatter {
+    pub fn new(locale_name: &str) -> UniquePtr<LocalizedNumberFormatter> {
+        new_localized_number_formatter(locale_name)
+    }
+}

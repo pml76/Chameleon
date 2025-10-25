@@ -7,6 +7,7 @@ use polars::datatypes::AnyValue::*;
 use polars::df;
 use polars::prelude::{AnyValue, CatSize, CategoricalMapping, DataFrame, TimeUnit, TimeZone};
 use std::sync::Arc;
+use chameleon_format_dialog::format::LocalizedNumberFormatter;
 
 #[cxx_qt::bridge]
 mod qobject {
@@ -116,7 +117,19 @@ impl Attache {
             Int64(i) => QVariant::from(&QString::from(format_i64(&self.i64_format, i))),
             Float32(f) => QVariant::from(&QString::from(format_f32(&self.f32_format, f))),
             */
-            Float64(_f) => QVariant::default(), // QVariant::from(&QString::from(format_f64(&self.f64_format, f))),
+            Float64(f) => {
+                let number_formatter = LocalizedNumberFormatter::new("en");
+                let formatted_number = number_formatter.format_f64(*f);
+                match formatted_number {
+                    Ok(formatted_number) => {
+                        QVariant::from(&QString::from(formatted_number))
+                    }
+                    Err(e) => {
+                        QVariant::from(&QString::from(format!("{:?}", e)))
+                    }
+                }
+
+            },
 
             Date(d) => {
                 let o_date = NaiveDate::from_epoch_days(*d);

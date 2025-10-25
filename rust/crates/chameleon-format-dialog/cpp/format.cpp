@@ -7,6 +7,11 @@
 #include "chameleon-format-dialog/src/number_sign_display_selector_model.cxxqt.h"
 
 
+std::unique_ptr<LocalizedNumberFormatter> new_localized_number_formatter(const rust::Str locale_name)
+{
+    return std::make_unique<LocalizedNumberFormatter>(std::string(locale_name));
+}
+
 number::LocalizedNumberFormatter new_number_formater_with_locale(const std::string &locale_name)
 {
     return number::NumberFormatter::withLocale(Locale::createCanonical(locale_name.c_str()));
