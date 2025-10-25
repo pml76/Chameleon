@@ -6,7 +6,11 @@ fn main() {
     let out_dir = std::env::var("OUT_DIR").unwrap();
     let cargo_manifest_dir = PathBuf::from(std::env::var("CARGO_MANIFEST_DIR").unwrap().as_str());
 
-    let lib_icu = vcpkg::Config::new().emit_includes(true).find_package("icu");
+    let lib_icu = vcpkg::Config::new()
+        .vcpkg_root(PathBuf::from("c:/GitHub/Chameleon/target/vcpkg/"))
+        .emit_includes(true)
+        .find_package("icu");
+    
     let mut paths : Vec<String> = Vec::new();
 
     match lib_icu {
@@ -45,7 +49,8 @@ fn main() {
             cc.files(["cpp/format.cpp", "cpp/locale.cpp", "cpp/units.cpp"]);
 
         })
-        .build();
+        .build()
+        .export();
 
 
     copy_dir_recursive(

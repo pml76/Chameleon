@@ -13,9 +13,14 @@ use std::pin::Pin;
 use cxx_qt::casting::Upcast;
 use cxx_qt_lib::{QGuiApplication, QQmlApplicationEngine, QQmlEngine, QUrl};
 use chameleon_settings::{get_global_settings_python_base_directory};
-
+pub use chameleon_format_dialog::*;
 
 const CODE: &CStr = c_str!(r#"
+import sys
+import os
+print(sys.path)
+print(os.getcwd())
+
 import polars as pl
 def function(*args, **kwargs):
     assert args == ("hello",)
@@ -24,6 +29,8 @@ def function(*args, **kwargs):
 "#);
 
 const CODE2: &CStr = c_str!(r#"
+print(sys.path)
+
 import numpy as np
 import polars as pl
 
@@ -88,10 +95,14 @@ fn pyo3_test_2() {
         let sys = py.import("sys")?;
         let path = sys.getattr("path")?;
         let mut python_base_directory = get_global_settings_python_base_directory();
+        path.call_method1("append", (python_base_directory.to_str().unwrap(),))?;
+
         python_base_directory.push("Lib");
         python_base_directory.push("site-packages");
 
         path.call_method1("append", (python_base_directory.to_str().unwrap(),))?;
+
+
 
         let module = PyModule::from_code(py, CODE, c_str!(""), c_str!(""))?;
         let fun = module.getattr("function")?;
@@ -153,7 +164,8 @@ fn pymain() -> PyResult<()> {
 
 
 
-pub fn run_main() {
+#[unsafe(no_mangle)]
+pub extern "C" fn run_main() {
 
     pyo3_test_2();
     pyo3_test_3();

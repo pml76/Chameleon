@@ -1,9 +1,16 @@
 #include <QtGui/QGuiApplication>
 #include <QtQml/QQmlApplicationEngine>
 
+extern "C" {
+  void run_main();
+}
+
 int
 main(int argc, char* argv[])
 {
+
+  run_main();
+
   QGuiApplication app(argc, argv);
 
   QQmlApplicationEngine engine;

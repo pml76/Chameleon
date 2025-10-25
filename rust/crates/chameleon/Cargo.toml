@@ -8,6 +8,8 @@ authors = [
 ]
 license = "MIT OR Apache-2.0"
 
+links = "chameleon"
+
 [lib]
 crate-type = ["staticlib", "lib"]
 
