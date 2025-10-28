@@ -1,5 +1,5 @@
 import QtQuick
-import QtQuick.Controls.FluentWinUI3
+import QtQuick.Controls.Basic
 import QtQuick.Window
 
 // This must match the uri and version
@@ -14,18 +14,13 @@ ApplicationWindow {
     width: 640
     color: palette.window
 
-    DataFrameModel {
+    TableManagerModel {
         id: tableModel
     }
 
     FormatDialog {
         id: dialog
 
-        selectedLocale: formatDialogModel.defaultLocale()
-        numberSignDisplay: formatDialogModel.defaultNumberSignDisplay()
-        notation: formatDialogModel.defaultNotation()
-        unitType: formatDialogModel.defaultUnitType()
-        unit: formatDialogModel.defaultUnit()
     }
 
     Button {

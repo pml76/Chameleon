@@ -14,7 +14,9 @@ fn main() {
 
 
     CxxQtBuilder::new_qml_module(QmlModule::new("chameleon.main").qml_files(["qml/main.qml"]))
-        .files(["src/python_dataframe_model.rs"])
+        .files([
+            "src/python_dataframe_model.rs",
+            "src/table_manager_model.rs" ])
         .build();
 
 
@@ -36,12 +38,13 @@ fn main() {
     )
     .expect("Failed to copy qml modules");
 
+    /*
     copy_dir_recursive(
         format!("{}/cxxqtbuild/", out_dir),
         format!("{}/../../../cxxqtbuild", out_dir),
     )
     .expect("Failed to copy cxxqtbuild");
-
+*/
 
     let mut qml_dir = PathBuf::from(cargo_manifest_dir.clone());
     qml_dir.pop();

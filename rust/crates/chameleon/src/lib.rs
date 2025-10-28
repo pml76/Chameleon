@@ -2,6 +2,9 @@
 pub mod python_dataframe_model;
 mod time_and_dates;
 mod dialogs;
+mod table_manager_model;
+mod table_model;
+mod default_table;
 
 use pyo3_polars::*;
 use pyo3::prelude::*;
@@ -151,9 +154,8 @@ fn pymain() -> PyResult<()> {
     })
 }
 
-
-
-pub fn run_main() {
+#[unsafe(no_mangle)]
+pub extern "C" fn run_main() {
 
     pyo3_test_2();
     pyo3_test_3();

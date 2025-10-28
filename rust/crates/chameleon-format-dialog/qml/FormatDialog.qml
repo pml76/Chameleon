@@ -5,11 +5,11 @@ import chameleon.dialogs.format
 
 Dialog {
 
-    required property string selectedLocale
-    required property string numberSignDisplay
-    required property string notation
-    required property string unitType
-    required property string unit
+    property string selectedLocale
+    property string numberSignDisplay
+    property string notation
+    property string unitType
+    property string unit
 
     property FormatDialogModel formatDialogModel
 
@@ -59,7 +59,7 @@ Dialog {
             id: numberSignDisplaySelectorModel
         }
         
-        anchors.top: localeSelectorBox.bottom
+        anchors.top: localeSelector.bottom
         anchors.topMargin: 10
         anchors.left: parent.left
         anchors.leftMargin: 10
@@ -84,7 +84,7 @@ Dialog {
             id: notationSelectorModel
         }
 
-        anchors.top: numberSignDisplaySelectorBox.bottom
+        anchors.top: numberSignDisplaySelector.bottom
         anchors.topMargin: 10
         anchors.left: parent.left
         anchors.leftMargin: 10
@@ -95,7 +95,7 @@ Dialog {
 
         textRole: "text"
         valueRole: "value"
-        model: notionSelectorModel
+        model: notationSelectorModel
 
         onActivated: index => {
             formatDialogModel.setNotionIndex(index)
@@ -110,7 +110,7 @@ Dialog {
             id: unitTypeSelectorModel
         }
 
-        anchors.top: notionSelectorBox.bottom
+        anchors.top: notationSelector.bottom
         anchors.topMargin: 10
         anchors.left: parent.left
         anchors.leftMargin: 10

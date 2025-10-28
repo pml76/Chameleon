@@ -5,8 +5,14 @@ use build_utils::copy_dir_recursive;
 fn main() {
     let out_dir = std::env::var("OUT_DIR").unwrap();
     let cargo_manifest_dir = PathBuf::from(std::env::var("CARGO_MANIFEST_DIR").unwrap().as_str());
+    let vcpkg_root = cargo_manifest_dir.clone().join("../../../target/vcpkg/");
 
-    let lib_icu = vcpkg::Config::new().emit_includes(true).find_package("icu");
+
+    let lib_icu =
+        vcpkg::Config::new()
+            .vcpkg_root(vcpkg_root)
+            .emit_includes(true)
+            .find_package("icu");
     let mut paths : Vec<String> = Vec::new();
 
     match lib_icu {

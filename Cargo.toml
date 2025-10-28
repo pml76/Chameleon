@@ -24,6 +24,7 @@ chameleon-format-dialog = {path = "rust/crates/chameleon-format-dialog" }
 chameleon = {path = "rust/crates/chameleon" }
 vcpkg = { version = "0.2.15" }
 build-utils = { path = "rust/crates/build-utils" }
+anyhow = { version = "1.0.100" }
 
 
 

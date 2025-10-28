@@ -2,6 +2,7 @@
 mod qobject {
     #[namespace = "Qt"]
     #[repr(i32)]
+    #[derive(Debug, Eq)]
     enum Orientation {
         Horizontal = 1,
         Vertical = 2,
@@ -12,6 +13,7 @@ mod qobject {
     /// Custom models should return data in these types.
     #[namespace = "Qt"]
     #[repr(i32)]
+    #[derive(Debug, Eq)]
     enum ItemDataRole {
         /// The general purpose roles (and the associated types) are:
         DisplayRole = 0,
