@@ -57,9 +57,7 @@ fn main() {
         python_base_directory: PathBuf::from(python_dir.clone()),
     };
 
-    let mut path = PathBuf::from(out_dir);
-    path.pop();
-    path.pop();
+    let mut path = PathBuf::from(cargo_manifest_dir.clone());
     path.pop();
     path.pop();
     path.pop();
