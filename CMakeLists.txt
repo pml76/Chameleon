@@ -52,6 +52,7 @@ cxx_qt_import_crate(MANIFEST_PATH rust/crates/chameleon/Cargo.toml
         CRATES chameleon
         CRATE_TYPES staticlib
         #LOCKED
+        NO_LINKER_OVERRIDE
         QT_MODULES Qt::Core Qt::Gui Qt::Qml Qt::QuickControls2 Qt::Network
 )
 
@@ -83,7 +84,9 @@ find_package(Python REQUIRED COMPONENTS Development.Module Interpreter)
 find_package(ICU REQUIRED COMPONENTS uc data tu io i18n)
 
 # Link to the qml module, which in turn links to the Rust qml_multi_crates library
-target_link_libraries(chameleon_bin PRIVATE Python::Module ICU::i18n ICU::uc ICU::data ICU::tu ICU::io Qt::Core Qt::Gui Qt::Qml chameleon_main chameleon_dialog)
+target_link_libraries(chameleon_bin PRIVATE
+        Python::Module ICU::i18n ICU::uc ICU::data ICU::tu ICU::io
+        Qt::Core Qt::Gui Qt::Qml chameleon_main chameleon_dialog)
 
 # If we are using a statically linked Qt then we need to import any qml plugins
 qt_import_qml_plugins(chameleon_bin)
