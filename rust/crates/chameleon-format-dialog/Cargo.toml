@@ -9,7 +9,6 @@ cxx-qt = { workspace = true }
 cxx-qt-lib = { workspace = true }
 cxx-qt-lib-additions = { workspace = true }
 chameleon_settings = { workspace = true }
-icu = {workspace = true}
 
 
 [build-dependencies]

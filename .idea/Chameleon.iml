@@ -1,2 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module classpath="CMake" type="CPP_MODULE" version="4" />
+<module type="EMPTY_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/rust/crates/build-utils/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/rust/crates/chameleon-format-dialog/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/rust/crates/chameleon/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/rust/crates/chameleon_bin/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/rust/crates/chameleon_settings/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/rust/crates/cxx-qt-lib-additions/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/rust/xtask/src" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/target" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

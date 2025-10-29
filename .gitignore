@@ -3,7 +3,7 @@ build/
 build-*/
 build-output/
 .venv/
-
+.env
 
 # C++ objects and libs
 *.slo
