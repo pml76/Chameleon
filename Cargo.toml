@@ -13,7 +13,7 @@ chrono = { version = "0.4.42" }
 chrono-tz = { version = "0.10.4", features = ["case-insensitive"]}
 cxx-qt-lib-additions = { path = "rust/crates/cxx-qt-lib-additions" }
 dioxus = {version = "0.7.0-rc.3"}
-diesel = {version = "2.3.3", features = ["postgres", "sqlite"] }
+diesel = {version = "2.3.3", features = ["postgres", "sqlite", "extras"] }
 libsqlite3-sys = { version = "0.35.0", features = ["bundled"] }
 dotenvy = "0.15.7"
 
